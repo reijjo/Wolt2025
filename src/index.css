@@ -1,86 +1,86 @@
 * {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-	width: 100%;
-	height: 100%;
-	min-height: 100dvh;
-	position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  position: relative;
 
-	font-size: 1rem;
+  font-size: 1rem;
 
-	/* background: linear-gradient(to bottom right, var(--background-950), var(--background-900)); */
-	background: radial-gradient(var(--background-900), var(--background-950)) no-repeat center / cover;
-	/* background-color: var(--background-950); */
-	color: var(--text-light);
-	/* background-color: #003cac; */
-	/* color: white; */
+  /* background: linear-gradient(to bottom right, var(--background-950), var(--background-900)); */
+  background: radial-gradient(var(--background-900), var(--background-950))
+    no-repeat center / cover;
+  /* background-color: var(--background-950); */
+  color: var(--text-light);
+  /* background-color: #003cac; */
+  /* color: white; */
 }
 
 :root {
   font-family: "Outfit", serif;
-	font-weight: 400;
-	font-optical-sizing: auto;
-	font-style: normal;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-style: normal;
 
-	/* Colors */
-	--primary: #00c2e8;
-	--primary-50: #ebfeff;
-	--primary-100: #cefaff;
-	--primary-200: #a2f3ff;
-	--primary-300: #63e8fd;
-	--primary-400: #1cd3f4;
-	--primary-500: #00c2e8;
-	--primary-600: #0391b7;
-	--primary-700: #0a7394;
-	--primary-800: #125d78;
-	--primary-900: #144e65;
-	--primary-950: #063346;
+  /* Colors */
+  --primary: #00c2e8;
+  --primary-50: #ebfeff;
+  --primary-100: #cefaff;
+  --primary-200: #a2f3ff;
+  --primary-300: #63e8fd;
+  --primary-400: #1cd3f4;
+  --primary-500: #00c2e8;
+  --primary-600: #0391b7;
+  --primary-700: #0a7394;
+  --primary-800: #125d78;
+  --primary-900: #144e65;
+  --primary-950: #063346;
 
-	--background: hsl(220, 93%, 17%);
-	--background-50: #eaf7ff;
-	--background-100: #d0edff;
-	--background-200: #abe2ff;
-	--background-300: #71d2ff;
-	--background-400: #2fb6ff;
-	--background-500: #008eff;
-	--background-600: #0066ff;
-	--background-700: #004cff;
-	--background-800: #003fdd;
-	--background-900: hsl(219, 100%, 34%);
-	--background-950: #031e54;
+  --background: hsl(220, 93%, 17%);
+  --background-50: #eaf7ff;
+  --background-100: #d0edff;
+  --background-200: #abe2ff;
+  --background-300: #71d2ff;
+  --background-400: #2fb6ff;
+  --background-500: #008eff;
+  --background-600: #0066ff;
+  --background-700: #004cff;
+  --background-800: #003fdd;
+  --background-900: hsl(219, 100%, 34%);
+  --background-950: #031e54;
 
-	--text-light: hsl(220, 93%, 97%);
-	--text-dark: hsl(220, 93%, 3%);
+  --text-light: hsl(220, 93%, 97%);
+  --text-dark: hsl(220, 93%, 3%);
 
-	/* Shadows */
-	--shadow-primary-m: 0 4px 32px rgba(204, 250, 255, 0.25);
+  /* Shadows */
+  --shadow-primary-m: 0 4px 32px rgba(204, 250, 255, 0.25);
 }
 
 /* Headers */
 :is(h1, h2, h3, h4) {
-	font-family: "Nunito", serif;
-	font-weight: 900;
-	font-optical-sizing: auto;
-	font-style: normal;
-	text-transform: capitalize;
+  font-family: "Nunito", serif;
+  font-weight: 900;
+  font-optical-sizing: auto;
+  font-style: normal;
+  text-transform: capitalize;
 }
 
 h1 {
-	font-size: 3rem;
+  font-size: 3rem;
 }
 
 :is(h5, h6) {
-	font-family: "Nunito", serif;
+  font-family: "Nunito", serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
-	font-size: 2rem;
+  font-size: 1.5rem;
 }
-
 
 /* Fonts */
 .outfit-font {
