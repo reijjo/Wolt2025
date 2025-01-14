@@ -54,11 +54,21 @@
 .breakdown-details {
 	display: flex;
 	flex-direction: column;
-	gap: 0.5rem;
 }
 
 .breakdown-item {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	font-variant-numeric: tabular-nums;
+	padding: 0.25rem 0;
+	order: 0;
+
+	&:last-child {
+		font-size: 1.125rem;
+	}
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.2);
+	}
 }
