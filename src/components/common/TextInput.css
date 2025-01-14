@@ -1,0 +1,22 @@
+input[type='text'] {
+	height: 2.5rem;
+	padding: 0.25rem 1rem;
+	border: thin solid var(--primary);
+	border-radius: 2rem;
+	font: inherit;
+
+	&:disabled {
+		opacity: 0.8;
+		cursor: not-allowed;
+	}
+}
+
+.text-input {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+label {
+	margin-left: 0.25rem;
+}

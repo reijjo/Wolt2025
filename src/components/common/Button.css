@@ -1,0 +1,27 @@
+.btn {
+	all: unset;
+	padding: 0.25rem 0.5rem;
+	height: 2.5rem;
+	border-radius: 2rem;
+	text-align: center;
+	cursor: pointer;
+}
+
+.btn-filled {
+	background: linear-gradient(to bottom, var(--primary-400), var(--primary-500));
+	font-family: 'Nunito', serif;
+	font-weight: 800;
+	/* letter-spacing: 0.5px; */
+	color: black;
+
+	&:hover {
+		background: linear-gradient(to bottom, var(--primary-600), var(--primary-700));
+		color: white;
+	}
+
+	&:active {
+	background: linear-gradient(to bottom, var(--primary-700), var(--primary-800));
+	color: white;
+
+	}
+}

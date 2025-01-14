@@ -1,7 +1,7 @@
 # Wolt 2025 Frontend Engineering Internship
-### Instructions
+
 <details>
-</summary>Instructions<summary>
+<summary>Instructions</summary>
 
 # Wolt 2025 Frontend Engineering Internship
 
