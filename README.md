@@ -1,7 +1,8 @@
 # Wolt 2025 Frontend Engineering Internship
-##### Instructions
-<summary>
+### Instructions
 <details>
+</summary>Instructions<summary>
+
 # Wolt 2025 Frontend Engineering Internship
 
 Preliminary Assignment for frontend internships. Welcome! We are delighted to see you applying. Now it's your time to shine.
@@ -227,4 +228,3 @@ A good check before sending your solution is to unzip the Zip archive into a new
 
 
 </details>
-</summary>
