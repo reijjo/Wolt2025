@@ -1,0 +1,40 @@
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container {
+  width: min(100%, 400px);
+  height: auto;
+  border: 1px solid var(--primary);
+  border-radius: 0.5rem;
+  background-color: var(--primary-50);
+  color: var(--text-dark);
+  overflow: hidden;
+  box-shadow: 0 0px 32px rgba(204, 250, 255, 0.55);
+}
+
+.modal-header {
+  background: linear-gradient(to right, var(--primary), var(--primary-600));
+  padding: 0.5rem 1rem;
+}
+
+.modal-content {
+  padding: 1rem;
+  text-wrap: balance;
+}
+
+.modal-buttons {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  display: flex;
+  gap: 8px;
+}

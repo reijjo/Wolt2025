@@ -1,0 +1,28 @@
+.price-breakdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.breakdown-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.breakdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-variant-numeric: tabular-nums;
+  padding: 0.25rem;
+  order: 0;
+
+  &:last-child {
+    font-size: 1.125rem;
+    font-weight: bold;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--primary-300);
+  }
+}

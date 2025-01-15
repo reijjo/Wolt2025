@@ -7,6 +7,13 @@
   text-align: center;
   cursor: pointer;
   border: 2px solid transparent;
+
+  &:disabled {
+    background-color: lightgray;
+    border-color: gray;
+    color: gray;
+    pointer-events: none;
+  }
 }
 
 .btn-filled {

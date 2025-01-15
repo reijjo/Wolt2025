@@ -4,3 +4,8 @@ export interface UserInputs {
   latitude: number;
   longitude: number;
 }
+
+export interface LonLat {
+  lon: number;
+  lat: number;
+}
