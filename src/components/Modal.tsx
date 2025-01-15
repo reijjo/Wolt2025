@@ -2,7 +2,7 @@ import "./Modal.css";
 
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
-import { useModal } from "../context/modal";
+import { useModalContext } from "../context/modal";
 import { Button } from "./common/Button";
 
 interface ModalProps {
@@ -20,7 +20,7 @@ export const Modal = ({
   cancelBtn,
   action,
 }: ModalProps) => {
-  const { closeModal } = useModal();
+  const { closeModal } = useModalContext();
   return (
     <div className="overlay">
       <div className="modal-container">

@@ -1,100 +1,63 @@
 import "./DetailsForm.css";
 
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect } from "react";
 
-import { fetchIpLocation } from "../../api/api";
-import { useModal } from "../../context/modal";
-import { UserInputs } from "../../utils/types";
-import { Modal } from "../Modal";
+import { fetchVenues } from "../../api/api";
+import { useModalContext } from "../../context/modal";
+import { useDetailsForm } from "../../hooks/useDetailsForm";
+import { useParsers } from "../../hooks/useParsers";
 import { Button } from "../common/Button";
 import { TextInput } from "../common/TextInput";
 
 export const DetailsForm = () => {
-  const [userInputs, setUserInputs] = useState<UserInputs>({
-    venue: "home-assignment-venue-helsinki",
-    cart: 0,
-    latitude: 0,
-    longitude: 0,
-  });
-  const [useIp, setUseIp] = useState(false);
-  const { openModal, closeModal } = useModal();
+  const {
+    userInputs,
+    setUserInputs,
+    useIp,
+    getIpLocation,
+    getBrowserLocation,
+    errors,
+    setErrors,
+  } = useDetailsForm();
+  const { validateUserInputs } = useParsers();
+  const { closeModal } = useModalContext();
 
   useEffect(() => {
     if (useIp) {
-      const getIpLocation = async () => {
-        const data = await fetchIpLocation();
-        if (data) {
-          setUserInputs((prev) => ({
-            ...prev,
-            latitude: data.lat,
-            longitude: data.lon,
-          }));
-        }
-        setUseIp(false);
-        closeModal();
-      };
       getIpLocation();
     }
-  }, [useIp, closeModal]);
+  }, [useIp, getIpLocation, closeModal]);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInputs((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const getLocation = (e: SyntheticEvent) => {
+  const calculatePrice = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    const naviSuccess = (position: GeolocationPosition) => {
-      console.log("position", position);
-      setUserInputs((prev) => ({
-        ...prev,
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      }));
-    };
+    const validation = validateUserInputs(userInputs);
+    if (!validation.isValid) {
+      setErrors(validation.errors);
+      console.log("all errors", errors);
+      console.log("venuerrorr", errors.venue);
+      return;
+    }
 
-    const naviError = async (error: GeolocationPositionError) => {
-      if (error.code === 1) {
-        openModal(
-          <Modal
-            header="No location access!"
-            children="Please enable location or get your location with IP address, which may be less accurate."
-            okBtn="Use IP"
-            cancelBtn="Go back"
-            action={() => setUseIp(true)}
-          />,
-        );
-      }
+    console.log("userInputs", userInputs);
 
-      // if (useIp) {
-      //   try {
-      //     const { data } = await axios.get("https://ipapi.co/json/");
-      //     setUserInputs((prev) => ({
-      //       ...prev,
-      //       latitude: data.latitude,
-      //       longitude: data.longitude,
-      //     }));
-      //   } catch (error: unknown) {
-      //     console.error("Error getting location by ip", error);
-      //   } finally {
-      //     setUseIp(false);
-      //     closeModal();
-      //   }
-      // }
-    };
-    console.log("useIP", useIp);
-
-    navigator.geolocation.getCurrentPosition(naviSuccess, naviError);
-  };
-
-  const calculatePrice = (e: SyntheticEvent) => {
-    e.preventDefault();
-    console.log("Calculating price...");
+    try {
+      const venues = await fetchVenues(userInputs.venue);
+      console.log("Calculating price...");
+      console.log("venues", venues);
+    } catch (error: unknown) {
+      console.error("Error getting venues", error);
+    }
   };
 
   return (
-    <form className="form-details" onSubmit={getLocation}>
+    <form className="form-details" onSubmit={getBrowserLocation}>
       <TextInput
         label="Venue slug"
         name="venue"
@@ -103,6 +66,7 @@ export const DetailsForm = () => {
         placeholder="Venue..."
         value={userInputs.venue}
         onChange={handleInput}
+        errors={errors}
       />
       <TextInput
         label="Cart value (EUR)"
@@ -112,6 +76,7 @@ export const DetailsForm = () => {
         placeholder="Value..."
         value={userInputs.cart || ""}
         onChange={handleInput}
+        errors={errors}
       />
       <TextInput
         label="User latitude"
