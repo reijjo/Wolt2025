@@ -18,6 +18,9 @@ export const DetailsForm = () => {
     getBrowserLocation,
     errors,
     setErrors,
+    handleFocus,
+    handleBlur,
+    invalidInput,
   } = useDetailsForm();
   const { validateUserInputs } = useParsers();
   const { closeModal } = useModalContext();
@@ -31,7 +34,7 @@ export const DetailsForm = () => {
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInputs((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
+    invalidInput(name, value);
   };
 
   const calculatePrice = async (e: SyntheticEvent) => {
@@ -66,6 +69,8 @@ export const DetailsForm = () => {
         placeholder="Venue..."
         value={userInputs.venue}
         onChange={handleInput}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         errors={errors}
       />
       <TextInput
@@ -76,6 +81,7 @@ export const DetailsForm = () => {
         placeholder="Value..."
         value={userInputs.cart || ""}
         onChange={handleInput}
+        onFocus={handleFocus}
         errors={errors}
       />
       <TextInput

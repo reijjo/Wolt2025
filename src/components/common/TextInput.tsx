@@ -20,8 +20,6 @@ export const TextInput = ({
   errors,
   ...props
 }: TextInputProps) => {
-  console.log("INPUTERRORS", errors);
-
   return (
     <div className="text-input">
       <label htmlFor={id}>{label}</label>
@@ -33,7 +31,11 @@ export const TextInput = ({
         {...props}
         style={{ width: width }}
       />
-      {errors && <div className="error">{errors[name]}</div>}
+      {errors && errors[name] && (
+        <ul className="text-input-error">
+          <li>{errors[name]}</li>
+        </ul>
+      )}
     </div>
   );
 };

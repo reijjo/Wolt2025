@@ -22,12 +22,11 @@ export const useParsers = () => {
       inputs.venue !== "home-assignment-venue-helsinki" &&
       inputs.venue !== "home-assignment-venue-tallinn"
     ) {
-      errors.venue =
-        "Venue must be either 'home-assignment-venue-helsinki' or 'home-assignment-venue-tallinn'";
+      errors.venue = `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`;
     }
 
     if (!isValidNumber(parseNumber(inputs.cart))) {
-      errors.cart = "Cart must be a number";
+      errors.cart = "Cart value must be a number";
     }
 
     return {

@@ -61,6 +61,12 @@ body {
 
   /* Shadows */
   --shadow-primary-m: 0 4px 32px rgba(204, 250, 255, 0.25);
+
+  --error-dark: hsla(0, 85%, 25%, 1);
+  --error-base: hsla(0, 75%, 45%, 1);
+  --error-light: hsla(0, 75%, 65%, 1);
+  --error-xlight: hsla(0, 85%, 93%, 1);
+  --error-xxlight: hsla(0, 85%, 97%, 1);
 }
 
 /* Headers */

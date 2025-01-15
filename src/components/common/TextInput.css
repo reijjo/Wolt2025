@@ -20,3 +20,17 @@ input[type="text"] {
 label {
   margin-left: 0.5rem;
 }
+
+.text-input-error {
+  margin-left: 0.5rem;
+  padding: 0 0.5rem;
+  list-style-position: inside;
+  font-size: 0.925rem;
+  color: var(--error-base);
+  width: 90%;
+
+  & li {
+    text-wrap: balance;
+    /* white-space: nowrap; */
+  }
+}
