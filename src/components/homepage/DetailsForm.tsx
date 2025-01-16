@@ -23,7 +23,7 @@ export const DetailsForm = () => {
     getIpLocation,
   } = useDetailsForm();
   const { validateUserInputs } = useParsers();
-  const { venue, deliverySpecs, distance, getOrderInfo } =
+  const { isLoading, venue, deliverySpecs, distance, getOrderInfo } =
     usePriceCalculations();
   const { closeModal } = useModalContext();
 
@@ -56,6 +56,7 @@ export const DetailsForm = () => {
 
   return (
     <form className="form-details" onSubmit={getBrowserLocation}>
+      {isLoading && <div className="loading">Loading...</div>}
       <TextInput
         label="Venue slug"
         name="venue"

@@ -11,9 +11,12 @@ export const usePriceCalculations = () => {
     null,
   );
   const [distance, setDistance] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const { fetchSpecs, fetchVenueLocation } = useApi();
 
   const getOrderInfo = async (inputs: UserInputs) => {
+    setIsLoading(true);
     try {
       const [specsResult, venueResult] = await Promise.all([
         fetchSpecs(inputs.venue),
@@ -49,8 +52,10 @@ export const usePriceCalculations = () => {
       setDistance(dist);
     } catch (error: unknown) {
       console.error("Error getting venues", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return { venue, deliverySpecs, distance, getOrderInfo };
+  return { isLoading, venue, deliverySpecs, distance, getOrderInfo };
 };
