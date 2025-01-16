@@ -23,14 +23,23 @@ label {
 
 .text-input-error {
   margin-left: 0.5rem;
-  padding: 0 0.5rem;
-  list-style-position: inside;
+  padding: 0 1rem;
+  list-style-position: outside;
   font-size: 0.925rem;
   color: var(--error-base);
-  width: 90%;
+  width: 100%;
 
   & li {
     text-wrap: balance;
-    /* white-space: nowrap; */
+    list-style-type: disc;
   }
+
+  & li::marker {
+    margin: 5;
+    padding: 0;
+  }
+}
+
+.text-input input[type="text"].input-error-style {
+  border: 2px solid var(--error-base);
 }

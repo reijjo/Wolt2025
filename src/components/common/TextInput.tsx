@@ -20,6 +20,8 @@ export const TextInput = ({
   errors,
   ...props
 }: TextInputProps) => {
+  const hasError = errors && errors[name];
+
   return (
     <div className="text-input">
       <label htmlFor={id}>{label}</label>
@@ -28,6 +30,7 @@ export const TextInput = ({
         name={name}
         id={id}
         data-test-id={dataTestId}
+        className={`${hasError ? "input-error-style" : ""}`}
         {...props}
         style={{ width: width }}
       />

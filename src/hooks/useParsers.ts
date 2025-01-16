@@ -13,6 +13,11 @@ export const useParsers = () => {
     return Number(input);
   };
 
+  const parseCart = (input: string): number => {
+    const floatValue = parseFloat(input);
+    return Math.round(floatValue * 100);
+  };
+
   const validateUserInputs = (inputs: UserInputs) => {
     const errors: { [key: string]: string } = {};
 
@@ -25,8 +30,18 @@ export const useParsers = () => {
       errors.venue = `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`;
     }
 
-    if (!isValidNumber(parseNumber(inputs.cart))) {
+    if (inputs.cart.toString().includes(",")) {
+      errors.cart = "Change ',' to '.'";
+    } else if (!isValidNumber(parseNumber(inputs.cart))) {
       errors.cart = "Cart value must be a number";
+    }
+
+    if (!isValidNumber(parseNumber(inputs.latitude))) {
+      errors.latitude = "Latitude must be a number";
+    }
+
+    if (!isValidNumber(parseNumber(inputs.longitude))) {
+      errors.longitude = "Longitude must be a number";
     }
 
     return {
@@ -37,6 +52,7 @@ export const useParsers = () => {
 
   return {
     // parseNumber,
+    parseCart,
     validateUserInputs,
   };
 };
