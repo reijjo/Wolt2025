@@ -3,7 +3,7 @@ import "./DetailsForm.css";
 import { ChangeEvent, SyntheticEvent, useEffect } from "react";
 
 import { Button } from "../../components/common/Button/Button";
-import { TextInput } from "../../components/common/TextInput";
+import { TextInput } from "../../components/common/TextInput/TextInput";
 import { Loading } from "../../components/loading/Loading";
 import { useModalContext } from "../../context/modal";
 import { useDetailsForm } from "../../hooks/useDetailsForm";
