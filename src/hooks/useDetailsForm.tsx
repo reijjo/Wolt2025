@@ -2,7 +2,7 @@ import { SyntheticEvent, useState } from "react";
 
 import { fetchIpLocation } from "../api/api";
 // import { fetchIpLocation } from "../api/api";
-import { Modal } from "../components/Modal";
+import { Modal } from "../components/modal/Modal";
 import { useModalContext } from "../context/modal";
 import { initialUserInputs } from "../utils/defaults";
 import { UserInputs } from "../utils/types";

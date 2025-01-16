@@ -2,12 +2,13 @@ import "./DetailsForm.css";
 
 import { ChangeEvent, SyntheticEvent, useEffect } from "react";
 
+import { Button } from "../../components/common/Button";
+import { TextInput } from "../../components/common/TextInput";
+import { Loading } from "../../components/loading/Loading";
 import { useModalContext } from "../../context/modal";
 import { useDetailsForm } from "../../hooks/useDetailsForm";
 import { useParsers } from "../../hooks/useParsers";
 import { usePriceCalculations } from "../../hooks/usePriceCalculations";
-import { Button } from "../common/Button";
-import { TextInput } from "../common/TextInput";
 
 export const DetailsForm = () => {
   const {
@@ -56,7 +57,7 @@ export const DetailsForm = () => {
 
   return (
     <form className="form-details" onSubmit={getBrowserLocation}>
-      {isLoading && <div className="loading">Loading...</div>}
+      {isLoading && <Loading />}
       <TextInput
         label="Venue slug"
         name="venue"

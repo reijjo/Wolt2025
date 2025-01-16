@@ -2,8 +2,8 @@ import "./Modal.css";
 
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
-import { useModalContext } from "../context/modal";
-import { Button } from "./common/Button";
+import { useModalContext } from "../../context/modal";
+import { Button } from "../common/Button";
 
 interface ModalProps {
   header: string;

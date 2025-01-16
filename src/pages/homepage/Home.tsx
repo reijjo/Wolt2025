@@ -1,6 +1,6 @@
 import "./Home.css";
 
-import { Divider } from "../common/Divider";
+import { Divider } from "../../components/common/Divider";
 import { DetailsForm } from "./DetailsForm";
 import { PriceBreakdown } from "./PriceBreakdown";
 

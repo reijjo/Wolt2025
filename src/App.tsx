@@ -5,8 +5,8 @@ import {
   Routes,
 } from "react-router-dom";
 
-import { Layout } from "./components/Layout";
-import { Home } from "./components/homepage/Home";
+import { Layout } from "./components/layout/Layout";
+import { Home } from "./pages/homepage/Home";
 
 function App() {
   return (
