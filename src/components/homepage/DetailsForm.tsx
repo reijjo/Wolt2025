@@ -1,33 +1,30 @@
 import "./DetailsForm.css";
 
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect } from "react";
 
-import { getDistance } from "geolib";
-
-import { fetchDeliverySpecs, fetchVenue } from "../../api/api";
 import { useModalContext } from "../../context/modal";
 import { useDetailsForm } from "../../hooks/useDetailsForm";
 import { useParsers } from "../../hooks/useParsers";
-import { LonLat } from "../../utils/types";
+import { usePriceCalculations } from "../../hooks/usePriceCalculations";
 import { Button } from "../common/Button";
 import { TextInput } from "../common/TextInput";
 
 export const DetailsForm = () => {
-  // const [distance, setDistance] = useState<number | undefined>(undefined);
-  const [venue, setVenue] = useState<LonLat | null>(null);
   const {
     userInputs,
     setUserInputs,
     useIp,
-    getIpLocation,
     getBrowserLocation,
     errors,
     setErrors,
     handleFocus,
     handleBlur,
     invalidInput,
+    getIpLocation,
   } = useDetailsForm();
-  const { validateUserInputs, parseCart } = useParsers();
+  const { validateUserInputs } = useParsers();
+  const { venue, deliverySpecs, distance, getOrderInfo } =
+    usePriceCalculations();
   const { closeModal } = useModalContext();
 
   useEffect(() => {
@@ -52,35 +49,10 @@ export const DetailsForm = () => {
       return;
     }
 
-    console.log("parsecart", parseCart(userInputs.cart.toString()));
-    console.log("userInputs", userInputs);
-
-    try {
-      const venueData = await fetchVenue(userInputs.venue);
-      setVenue(venueData);
-
-      const distance = getDistance(
-        {
-          latitude: userInputs.latitude,
-          longitude: userInputs.longitude,
-        },
-        {
-          latitude: venueData.lat,
-          longitude: venueData.lon,
-        },
-      );
-
-      console.log("distance", distance);
-
-      const prices = await fetchDeliverySpecs(userInputs.venue);
-      console.log("distance", distance);
-      console.log("Calculating price...");
-      console.log("venues", venue);
-      console.log("prices", prices);
-    } catch (error: unknown) {
-      console.error("Error getting venues", error);
-    }
+    getOrderInfo(userInputs);
   };
+
+  console.log("venue and specs and distance", venue, deliverySpecs, distance);
 
   return (
     <form className="form-details" onSubmit={getBrowserLocation}>

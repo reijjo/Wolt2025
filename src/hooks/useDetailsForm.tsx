@@ -1,6 +1,7 @@
 import { SyntheticEvent, useState } from "react";
 
 import { fetchIpLocation } from "../api/api";
+// import { fetchIpLocation } from "../api/api";
 import { Modal } from "../components/Modal";
 import { useModalContext } from "../context/modal";
 import { initialUserInputs } from "../utils/defaults";
@@ -94,10 +95,10 @@ export const useDetailsForm = () => {
     errors,
     setErrors,
     updateLocation,
-    getIpLocation,
     getBrowserLocation,
     handleFocus,
     handleBlur,
+    getIpLocation,
     invalidInput,
   };
 };
