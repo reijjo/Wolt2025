@@ -2,7 +2,7 @@ import "./DetailsForm.css";
 
 import { ChangeEvent, SyntheticEvent, useEffect } from "react";
 
-import { Button } from "../../components/common/Button";
+import { Button } from "../../components/common/Button/Button";
 import { TextInput } from "../../components/common/TextInput";
 import { Loading } from "../../components/loading/Loading";
 import { useModalContext } from "../../context/modal";
