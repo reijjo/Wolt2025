@@ -1,7 +1,7 @@
 import "./Loading.css";
 
 type LoadingProps = {
-  loadingText: string;
+  loadingText?: string;
 };
 
 export const Loading = ({ loadingText = "Loading..." }: LoadingProps) => (

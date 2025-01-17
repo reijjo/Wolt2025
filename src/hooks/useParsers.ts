@@ -2,19 +2,28 @@ import { UserInputs } from "../utils/types";
 
 export const useParsers = () => {
   const isValidNumber = (input: unknown): input is number => {
-    return typeof input === "number" && !isNaN(input);
+    return typeof input === "number" && !isNaN(Number(input));
   };
 
   const isString = (input: unknown): input is string => {
     return typeof input === "string" && input.trim().length > 0;
   };
 
+  const isValidCartInput = (input: string): boolean => {
+    const cartRegex = /^\d*\.?\d*$/;
+    return cartRegex.test(input) && input.trim() !== "" && input.trim() !== ".";
+  };
+
   const parseNumber = (input: number): number => {
     return Number(input);
   };
 
-  const parseCart = (input: string): number => {
+  const parseCart = (input: string) => {
+    // if (!isValidCartInput(input)) return null;
+
     const floatValue = parseFloat(input);
+    // if (!isNaN(floatValue)) return null;
+
     return Math.round(floatValue * 100);
   };
 
@@ -32,8 +41,13 @@ export const useParsers = () => {
 
     if (inputs.cart.toString().includes(",")) {
       errors.cart = "Change ',' to '.'";
-    } else if (!isValidNumber(parseCart(inputs.cart))) {
+    } else if (!isValidCartInput(inputs.cart)) {
       errors.cart = "Cart value must be a number";
+    } else {
+      const parsedCart = parseCart(inputs.cart);
+      if (parsedCart === null) {
+        errors.cart = "Invalid cart value";
+      }
     }
 
     if (!isValidNumber(parseNumber(inputs.latitude))) {

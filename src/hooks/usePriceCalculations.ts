@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { getDistance } from "geolib";
 
+import { usePriceContext } from "../context/price";
 import { DeliverySpecs, LonLat, UserInputs } from "../utils/types";
 import { useApi } from "./useApi";
 import { useParsers } from "./useParsers";
@@ -13,6 +14,7 @@ export const usePriceCalculations = () => {
   );
   // const [distance, setDistance] = useState<number>(0);
   // const [priceData, setPriceData] = useState<PriceData | null>(null);
+  const { setPriceData } = usePriceContext();
 
   const { fetchSpecs, fetchVenueLocation } = useApi();
   const { parseCart } = useParsers();
@@ -24,16 +26,11 @@ export const usePriceCalculations = () => {
         fetchVenueLocation(inputs.venue),
       ]);
 
-      if (!specsResult) {
-        console.error("No specs found");
+      if (!specsResult || !venueResult) {
+        console.error(!specsResult ? "No specs found" : "No venue found");
         setDeliverySpecs(null);
-        return;
-      }
-
-      if (!venueResult) {
-        console.error("No venue found");
         setVenue(null);
-        return;
+        return null;
       }
 
       setDeliverySpecs(specsResult);
@@ -67,19 +64,15 @@ export const usePriceCalculations = () => {
     console.log("getPrice specs", specs);
 
     if (!specs || !distance) {
-      console.log("SOmethingwrong with the delivery specs or distance");
-      console.log("WRONT SPECS", deliverySpecs);
-      console.log("WORONG DISTANCE", distance);
-      return;
+      console.error(!specs ? "No specs found" : "No distance found");
+      return null;
     }
 
     try {
       const { pricing, noSurcharge } = specs;
+      const cartValue = parseCart(inputs.cart);
 
-      let smallOrderSurcharge = Math.max(
-        0,
-        noSurcharge - parseCart(inputs.cart),
-      );
+      let smallOrderSurcharge = Math.max(0, noSurcharge - cartValue);
       if (smallOrderSurcharge < 0) {
         smallOrderSurcharge = 0;
       }
@@ -92,33 +85,28 @@ export const usePriceCalculations = () => {
 
       if (!distanceRanges) {
         console.error("Delivery distance out of range");
-        return;
+        return null;
       }
 
       const { a, b } = distanceRanges;
       const deliveryFee =
         pricing.basePrice + a + Math.round((b * distance) / 10);
 
-      const totalPrice =
-        parseCart(inputs.cart) + deliveryFee + smallOrderSurcharge;
+      const totalPrice = cartValue + deliveryFee + smallOrderSurcharge;
 
-      // setPriceData({
-      //   cartValue: Number(inputs.cart),
-      //   smallOrderSurcharge,
-      //   deliveryFee,
-      //   deliveryDistance: distance,
-      //   totalPrice,
-      // });
-      // console.log("pricedata", priceData);
-      return {
-        cartValue: parseCart(inputs.cart),
+      const calculatedPrice = {
+        cartValue,
         smallOrderSurcharge,
         deliveryFee,
         deliveryDistance: distance,
         totalPrice,
       };
+
+      setPriceData(calculatedPrice);
+      return calculatedPrice;
     } catch (error: unknown) {
       console.error("Error getting price", error);
+      return null;
     }
   };
 
@@ -127,6 +115,5 @@ export const usePriceCalculations = () => {
     deliverySpecs,
     getOrderInfo,
     getPrice,
-    // priceData,
   };
 };

@@ -1,27 +1,22 @@
 import "./PriceBreakdown.css";
 
-// import { usePriceCalculations } from "../../hooks/usePriceCalculations";
+import { usePriceContext } from "../../context/price";
 import { formatValue, parseName } from "../../utils/helperFunctions";
 
 export const PriceBreakdown = () => {
-  // const { priceData } = usePriceCalculations();
+  const { priceData } = usePriceContext();
 
-  const sampleData = {
-    cartValue: 1000,
-    smallOrderSurcharge: 0,
-    deliveryFee: 190,
-    deliveryDistance: 1050,
-    totalPrice: 1190,
-  };
+  if (!priceData) {
+    return null;
+  }
 
-  // console.log("pricedata", priceData);
-  console.log("dampleData", sampleData);
+  console.log("pricedata", priceData);
 
   return (
     <div className="price-breakdown">
       <h5>Price breakdown</h5>
       <div className="breakdown-details">
-        {Object.entries(sampleData)
+        {Object.entries(priceData)
           .sort()
           .map(([key, value]) => (
             <div className={`breakdown-item`} key={key}>
