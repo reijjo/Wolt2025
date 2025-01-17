@@ -5,7 +5,7 @@ import { Loading } from "./Loading";
 
 describe("Loading", async () => {
   test("renders Loading component", () => {
-    render(<Loading />);
+    render(<Loading loadingText="Loading..." />);
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 });

@@ -1,6 +1,6 @@
 import "./DetailsForm.css";
 
-import { ChangeEvent, SyntheticEvent, useEffect } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
 import { Button } from "../../components/common/Button/Button";
 import { TextInput } from "../../components/common/TextInput/TextInput";
@@ -9,8 +9,12 @@ import { useModalContext } from "../../context/modal";
 import { useDetailsForm } from "../../hooks/useDetailsForm";
 import { useParsers } from "../../hooks/useParsers";
 import { usePriceCalculations } from "../../hooks/usePriceCalculations";
+import { DeliverySpecs } from "../../utils/types";
+
+// import { initialUserInputs } from "../../utils/defaults";
 
 export const DetailsForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     userInputs,
     setUserInputs,
@@ -24,9 +28,10 @@ export const DetailsForm = () => {
     getIpLocation,
   } = useDetailsForm();
   const { validateUserInputs } = useParsers();
-  const { isLoading, venue, deliverySpecs, distance, getOrderInfo } =
-    usePriceCalculations();
+  const { getOrderInfo, getPrice } = usePriceCalculations();
   const { closeModal } = useModalContext();
+
+  let loadingText = "Loading data...";
 
   useEffect(() => {
     if (useIp) {
@@ -50,14 +55,32 @@ export const DetailsForm = () => {
       return;
     }
 
-    getOrderInfo(userInputs);
+    try {
+      setIsLoading(true);
+
+      const infoResult = await getOrderInfo(userInputs);
+      const { distance, specs } = infoResult ?? {};
+
+      loadingText = "Calculating price...";
+      const calculatedPrice = getPrice(
+        userInputs,
+        distance ?? 0,
+        specs as DeliverySpecs,
+      );
+      console.log("calculatedPrice", calculatedPrice);
+    } catch (error: unknown) {
+      console.log("error fetching order info", error);
+    } finally {
+      setIsLoading(false);
+      // setUserInputs(initialUserInputs);
+    }
   };
 
-  console.log("venue and specs and distance", venue, deliverySpecs, distance);
+  // console.log("DISTANCE", distance);
 
   return (
     <form className="form-details" onSubmit={getBrowserLocation}>
-      {isLoading && <Loading />}
+      {isLoading && <Loading loadingText={loadingText} />}
       <TextInput
         label="Venue slug"
         name="venue"

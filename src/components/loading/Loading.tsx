@@ -1,8 +1,12 @@
 import "./Loading.css";
 
-export const Loading = () => (
+type LoadingProps = {
+  loadingText: string;
+};
+
+export const Loading = ({ loadingText = "Loading..." }: LoadingProps) => (
   <div className="loading">
     <span className="loader"></span>
-    <p>Loading...</p>
+    <p>{loadingText}</p>
   </div>
 );

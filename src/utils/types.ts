@@ -1,6 +1,6 @@
 export interface UserInputs {
   venue: string;
-  cart: number;
+  cart: string;
   latitude: number;
   longitude: number;
 }
@@ -8,6 +8,14 @@ export interface UserInputs {
 export interface LonLat {
   lon: number;
   lat: number;
+}
+
+export interface PriceData {
+  cartValue: number;
+  smallOrderSurcharge: number;
+  deliveryFee: number;
+  deliveryDistance: number;
+  totalPrice: number;
 }
 
 export interface DeliveryPricing {

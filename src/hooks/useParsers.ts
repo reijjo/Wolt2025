@@ -32,7 +32,7 @@ export const useParsers = () => {
 
     if (inputs.cart.toString().includes(",")) {
       errors.cart = "Change ',' to '.'";
-    } else if (!isValidNumber(parseNumber(inputs.cart))) {
+    } else if (!isValidNumber(parseCart(inputs.cart))) {
       errors.cart = "Cart value must be a number";
     }
 

@@ -1,5 +1,17 @@
 # Wolt 2025 Frontend Engineering Internship
 
+## Testing the application
+
+### Unit tests
+
+- Run `npm run test` in the root of the folder
+
+### e2e tests
+
+- Run `npm run test:e2e` in the root of the folder
+
+## The task itself
+
 <details>
 <summary>Instructions</summary>
 
@@ -12,6 +24,7 @@ Note that frontend internship roles are only available in 🇫🇮 and 🇪🇪.
 **Please take your time, use the entire time available to complete this to the best of your ability - we do not prioritise submissions by speed!**
 
 ## Motivation
+
 The goal of the assignment is to showcase your coding skills and ability to develop realistic features.
 This is a highly important part of the hiring process, so it's crucial to put effort into this without making it too bloated.
 Based on the results of the assignment review, we will make the decision on whether to proceed to the technical interview.
@@ -120,6 +133,7 @@ It provides two JSON endpoints:
   - 🇪🇪 <https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/home-assignment-venue-tallinn/dynamic>
 
 Feel free to use any of these venue slugs during development:
+
 - home-assignment-venue-helsinki
 - home-assignment-venue-tallinn
 
@@ -178,7 +192,7 @@ You can assume that the order of the objects inside `distance_ranges` is sorted 
 You can also assume that the value for `min` is the same as the value for `max` in the previous object in the list.
 Also, the first object in the list always has `"min": 0` and the last object has `"max": 0`.
 
-For example, given the above `distance_ranges` example, if the delivery distance were 600 meters and the `base_price` were 199, the delivery fee would be 359 (base_price + a + b * distance / 10 == 199 + 100 + 1 * 600 / 10 == 359).
+For example, given the above `distance_ranges` example, if the delivery distance were 600 meters and the `base_price` were 199, the delivery fee would be 359 (base*price + a + b * distance / 10 == 199 + 100 + 1 \_ 600 / 10 == 359).
 Another example: if the delivery distance were 1000 meters or more, the delivery would not be possible.
 
 **All the money related information (prices, fees, etc) are in the lowest denomination of the local currency. In euro countries they are in cents.**
@@ -225,6 +239,5 @@ A good check before sending your solution is to unzip the Zip archive into a new
 ## Q&A
 
 > We'll keep adding common questions and answers here as they come up.
-
 
 </details>

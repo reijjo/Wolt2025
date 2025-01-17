@@ -1,8 +1,11 @@
 import "./PriceBreakdown.css";
 
+// import { usePriceCalculations } from "../../hooks/usePriceCalculations";
 import { formatValue, parseName } from "../../utils/helperFunctions";
 
 export const PriceBreakdown = () => {
+  // const { priceData } = usePriceCalculations();
+
   const sampleData = {
     cartValue: 1000,
     smallOrderSurcharge: 0,
@@ -10,6 +13,9 @@ export const PriceBreakdown = () => {
     deliveryDistance: 1050,
     totalPrice: 1190,
   };
+
+  // console.log("pricedata", priceData);
+  console.log("dampleData", sampleData);
 
   return (
     <div className="price-breakdown">

@@ -16,6 +16,7 @@ export const TextInput = ({
   name,
   id,
   dataTestId,
+
   width = "100%",
   errors,
   ...props
