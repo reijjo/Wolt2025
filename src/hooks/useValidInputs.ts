@@ -19,11 +19,7 @@ export const useValidInputs = () => {
   };
 
   const parseCart = (input: string) => {
-    // if (!isValidCartInput(input)) return null;
-
     const floatValue = parseFloat(input);
-    // if (!isNaN(floatValue)) return null;
-
     return Math.round(floatValue * 100);
   };
 
@@ -43,6 +39,8 @@ export const useValidInputs = () => {
       errors.cart = "Change ',' to '.'";
     } else if (!isValidCartInput(inputs.cart)) {
       errors.cart = "Cart value must be a number";
+    } else if (parseCart(inputs.cart) === 0) {
+      errors.cart = "Cart value is required";
     } else {
       const parsedCart = parseCart(inputs.cart);
       if (parsedCart === null) {

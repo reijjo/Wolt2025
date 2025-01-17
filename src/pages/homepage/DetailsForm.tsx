@@ -15,15 +15,16 @@ import {
   usePriceCalculations,
   useValidInputs,
 } from "../../hooks";
+import { useGetLocation } from "../../hooks/useGetLocation";
 import { DeliverySpecs } from "../../utils";
 
 export const DetailsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {
-    userInputs,
-    setUserInputs,
-    useIp,
-    getBrowserLocation,
+    // userInputs,
+    // setUserInputs,
+    // useIp,
+    // getBrowserLocation,
     errors,
     setErrors,
     notification,
@@ -31,13 +32,21 @@ export const DetailsForm = () => {
     handleFocus,
     handleBlur,
     invalidInput,
-    getIpLocation,
+    // getIpLocation,
   } = useDetailsForm();
   const { validateUserInputs } = useValidInputs();
   const { getOrderInfo, getPrice } = usePriceCalculations();
+  const {
+    getBrowserLocation,
+    getIpLocation,
+    useIp,
+    userInputs,
+    setUserInputs,
+  } = useGetLocation();
   const { closeModal } = useModalContext();
 
   useEffect(() => {
+    console.log("useIp", useIp);
     if (useIp) {
       getIpLocation();
     }

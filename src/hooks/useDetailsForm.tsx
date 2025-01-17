@@ -1,18 +1,21 @@
-import { SyntheticEvent, useState } from "react";
+// import { SyntheticEvent, useState } from "react";
+// import { fetchIpLocation } from "../api/api";
+// import { Modal } from "../components";
+import { useState } from "react";
 
-import { fetchIpLocation } from "../api/api";
-import { Modal } from "../components";
-import { useModalContext } from "../context";
-import { UserInputs, initialUserInputs } from "../utils";
+import { useGetLocation } from "./useGetLocation";
+// import { useModalContext } from "../context";
+// import { UserInputs, initialUserInputs } from "../utils";
 import { useValidInputs } from "./useValidInputs";
 
 export const useDetailsForm = () => {
-  const [userInputs, setUserInputs] = useState<UserInputs>(initialUserInputs);
-  const [useIp, setUseIp] = useState(false);
+  // const [userInputs, setUserInputs] = useState<UserInputs>(initialUserInputs);
+  // const [useIp, setUseIp] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [notification, setNotification] = useState("");
   const { validateUserInputs } = useValidInputs();
-  const { openModal, closeModal } = useModalContext();
+  const { userInputs } = useGetLocation();
+  // const { openModal, closeModal } = useModalContext();
 
   const showNotification = (message: string, time: number) => {
     setNotification(message);
@@ -21,51 +24,51 @@ export const useDetailsForm = () => {
     }, time);
   };
 
-  const updateLocation = (latitude: number, longitude: number) => {
-    setUserInputs((prev) => ({
-      ...prev,
-      latitude,
-      longitude,
-    }));
-  };
+  // const updateLocation = (latitude: number, longitude: number) => {
+  //   setUserInputs((prev) => ({
+  //     ...prev,
+  //     latitude,
+  //     longitude,
+  //   }));
+  // };
 
-  const getIpLocation = async () => {
-    try {
-      const data = await fetchIpLocation();
-      if (data) {
-        updateLocation(data.lat, data.lon);
-      }
-    } catch (error: unknown) {
-      console.error("Error getting location by ip", error);
-    } finally {
-      setUseIp(false);
-      closeModal();
-    }
-  };
+  // const getIpLocation = async () => {
+  //   try {
+  //     const data = await fetchIpLocation();
+  //     if (data) {
+  //       updateLocation(data.lat, data.lon);
+  //     }
+  //   } catch (error: unknown) {
+  //     console.error("Error getting location by ip", error);
+  //   } finally {
+  //     setUseIp(false);
+  //     closeModal();
+  //   }
+  // };
 
-  const getBrowserLocation = async (e: SyntheticEvent) => {
-    e.preventDefault();
+  // const getBrowserLocation = async (e: SyntheticEvent) => {
+  //   e.preventDefault();
 
-    const naviSuccess = (position: GeolocationPosition) => {
-      updateLocation(position.coords.latitude, position.coords.longitude);
-    };
+  //   const naviSuccess = (position: GeolocationPosition) => {
+  //     updateLocation(position.coords.latitude, position.coords.longitude);
+  //   };
 
-    const naviError = async (error: GeolocationPositionError) => {
-      if (error.code === 1) {
-        openModal(
-          <Modal
-            header="No location access!"
-            children="Please enable location or get your location with IP address, which may be less accurate."
-            okBtn="Use IP"
-            cancelBtn="Go back"
-            action={() => setUseIp(true)}
-          />,
-        );
-      }
-    };
+  //   const naviError = async (error: GeolocationPositionError) => {
+  //     if (error.code === 1) {
+  //       openModal(
+  //         <Modal
+  //           header="No location access!"
+  //           children="Please enable location or get your location with IP address, which may be less accurate."
+  //           okBtn="Use IP"
+  //           cancelBtn="Go back"
+  //           action={() => setUseIp(true)}
+  //         />,
+  //       );
+  //     }
+  //   };
 
-    navigator.geolocation.getCurrentPosition(naviSuccess, naviError);
-  };
+  //   navigator.geolocation.getCurrentPosition(naviSuccess, naviError);
+  // };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -94,19 +97,19 @@ export const useDetailsForm = () => {
   };
 
   return {
-    userInputs,
-    setUserInputs,
-    useIp,
-    setUseIp,
+    // userInputs,
+    // setUserInputs,
+    // useIp,
+    // setUseIp,
     errors,
     setErrors,
     notification,
     showNotification,
-    updateLocation,
-    getBrowserLocation,
+    // updateLocation,
+    // getBrowserLocation,
     handleFocus,
     handleBlur,
-    getIpLocation,
+    // getIpLocation,
     invalidInput,
   };
 };
