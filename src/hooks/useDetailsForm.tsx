@@ -1,19 +1,25 @@
 import { SyntheticEvent, useState } from "react";
 
 import { fetchIpLocation } from "../api/api";
-// import { fetchIpLocation } from "../api/api";
-import { Modal } from "../components/modal/Modal";
-import { useModalContext } from "../context/modal";
-import { initialUserInputs } from "../utils/defaults";
-import { UserInputs } from "../utils/types";
-import { useParsers } from "./useParsers";
+import { Modal } from "../components";
+import { useModalContext } from "../context";
+import { UserInputs, initialUserInputs } from "../utils";
+import { useValidInputs } from "./useValidInputs";
 
 export const useDetailsForm = () => {
   const [userInputs, setUserInputs] = useState<UserInputs>(initialUserInputs);
   const [useIp, setUseIp] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const { validateUserInputs } = useParsers();
+  const [notification, setNotification] = useState("");
+  const { validateUserInputs } = useValidInputs();
   const { openModal, closeModal } = useModalContext();
+
+  const showNotification = (message: string, time: number) => {
+    setNotification(message);
+    setTimeout(() => {
+      setNotification("");
+    }, time);
+  };
 
   const updateLocation = (latitude: number, longitude: number) => {
     setUserInputs((prev) => ({
@@ -94,6 +100,8 @@ export const useDetailsForm = () => {
     setUseIp,
     errors,
     setErrors,
+    notification,
+    showNotification,
     updateLocation,
     getBrowserLocation,
     handleFocus,

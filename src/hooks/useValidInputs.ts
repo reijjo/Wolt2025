@@ -1,6 +1,6 @@
-import { UserInputs } from "../utils/types";
+import { UserInputs } from "../utils";
 
-export const useParsers = () => {
+export const useValidInputs = () => {
   const isValidNumber = (input: unknown): input is number => {
     return typeof input === "number" && !isNaN(Number(input));
   };
@@ -65,7 +65,6 @@ export const useParsers = () => {
   };
 
   return {
-    // parseNumber,
     parseCart,
     validateUserInputs,
   };

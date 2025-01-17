@@ -2,24 +2,22 @@ import { useState } from "react";
 
 import { getDistance } from "geolib";
 
-import { usePriceContext } from "../context/price";
-import { DeliverySpecs, LonLat, UserInputs } from "../utils/types";
+import { usePriceContext } from "../context";
+import { DeliverySpecs, LonLat, UserInputs } from "../utils";
 import { useApi } from "./useApi";
-import { useParsers } from "./useParsers";
+import { useValidInputs } from "./useValidInputs";
 
 export const usePriceCalculations = () => {
   const [venue, setVenue] = useState<LonLat | null>(null);
   const [deliverySpecs, setDeliverySpecs] = useState<DeliverySpecs | null>(
     null,
   );
-  // const [distance, setDistance] = useState<number>(0);
-  // const [priceData, setPriceData] = useState<PriceData | null>(null);
   const { setPriceData } = usePriceContext();
-
   const { fetchSpecs, fetchVenueLocation } = useApi();
-  const { parseCart } = useParsers();
+  const { parseCart } = useValidInputs();
 
   const getOrderInfo = async (inputs: UserInputs) => {
+    setPriceData(null);
     try {
       const [specsResult, venueResult] = await Promise.all([
         fetchSpecs(inputs.venue),
@@ -59,10 +57,6 @@ export const usePriceCalculations = () => {
     distance: number,
     specs: DeliverySpecs,
   ) => {
-    console.log("getPrice inputs", inputs);
-    console.log("getPrice distance", distance);
-    console.log("getPrice specs", specs);
-
     if (!specs || !distance) {
       console.error(!specs ? "No specs found" : "No distance found");
       return null;

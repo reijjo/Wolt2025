@@ -2,14 +2,14 @@ import "./DetailsForm.css";
 
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
-import { Button } from "../../components/common/Button/Button";
-import { TextInput } from "../../components/common/TextInput/TextInput";
-import { Loading } from "../../components/loading/Loading";
-import { useModalContext } from "../../context/modal";
-import { useDetailsForm } from "../../hooks/useDetailsForm";
-import { useParsers } from "../../hooks/useParsers";
-import { usePriceCalculations } from "../../hooks/usePriceCalculations";
-import { DeliverySpecs } from "../../utils/types";
+import { Button, Loading, Notification, TextInput } from "../../components";
+import { useModalContext } from "../../context";
+import {
+  useDetailsForm,
+  usePriceCalculations,
+  useValidInputs,
+} from "../../hooks";
+import { DeliverySpecs } from "../../utils";
 
 export const DetailsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,12 +20,14 @@ export const DetailsForm = () => {
     getBrowserLocation,
     errors,
     setErrors,
+    notification,
+    showNotification,
     handleFocus,
     handleBlur,
     invalidInput,
     getIpLocation,
   } = useDetailsForm();
-  const { validateUserInputs } = useParsers();
+  const { validateUserInputs } = useValidInputs();
   const { getOrderInfo, getPrice } = usePriceCalculations();
   const { closeModal } = useModalContext();
 
@@ -48,6 +50,7 @@ export const DetailsForm = () => {
     if (!validation.isValid) {
       setErrors(validation.errors);
       console.log("all errors", errors);
+      showNotification(`Check your inputs`, 5000);
       return;
     }
 
@@ -61,6 +64,7 @@ export const DetailsForm = () => {
     } catch (error: unknown) {
       console.log("error fetching order info", error);
     } finally {
+      showNotification("", 0);
       setIsLoading(false);
     }
   };
@@ -115,6 +119,7 @@ export const DetailsForm = () => {
         onBlur={handleBlur}
         errors={errors}
       />
+      {notification && <Notification message={notification} type="error" />}
       <div className="button-group">
         <Button
           className="btn btn-filled"

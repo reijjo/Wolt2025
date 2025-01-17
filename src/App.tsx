@@ -5,9 +5,9 @@ import {
   Routes,
 } from "react-router-dom";
 
-import { Layout } from "./components/layout/Layout";
-import { PriceProvider } from "./context/price";
-import { Home } from "./pages/homepage/Home";
+import { Layout } from "./components";
+import { PriceProvider } from "./context";
+import { Home } from "./pages";
 
 function App() {
   return (
