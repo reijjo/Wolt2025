@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getDistance } from "geolib";
 
 import { usePriceContext } from "../context";
-import { DeliverySpecs, LonLat, UserInputs } from "../utils";
+import { DeliverySpecs, LonLat, UserInputs, initialPricaData } from "../utils";
 import { useApi } from "./useApi";
 import { useValidInputs } from "./useValidInputs";
 
@@ -17,7 +17,7 @@ export const usePriceCalculations = () => {
   const { parseCart } = useValidInputs();
 
   const getOrderInfo = async (inputs: UserInputs) => {
-    setPriceData(null);
+    setPriceData(initialPricaData);
     try {
       const [specsResult, venueResult] = await Promise.all([
         fetchSpecs(inputs.venue),

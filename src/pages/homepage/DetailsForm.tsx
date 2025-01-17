@@ -2,7 +2,13 @@ import "./DetailsForm.css";
 
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
-import { Button, Loading, Notification, TextInput } from "../../components";
+import {
+  Button,
+  Divider,
+  Loading,
+  Notification,
+  TextInput,
+} from "../../components";
 import { useModalContext } from "../../context";
 import {
   useDetailsForm,
@@ -120,6 +126,7 @@ export const DetailsForm = () => {
         errors={errors}
       />
       {notification && <Notification message={notification} type="error" />}
+      <Divider />
       <div className="button-group">
         <Button
           className="btn btn-filled"

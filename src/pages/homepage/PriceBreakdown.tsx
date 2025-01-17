@@ -1,26 +1,24 @@
 import "./PriceBreakdown.css";
 
-import { Divider } from "../../components";
 import { usePriceContext } from "../../context";
-import { formatValue, parseName } from "../../utils";
+import { formatValue, initialPricaData, parseName } from "../../utils";
 
 export const PriceBreakdown = () => {
   const { priceData } = usePriceContext();
 
-  if (!priceData) {
-    return null;
-  }
+  const data = priceData ?? initialPricaData;
+  // if (!priceData) {
+  //   return null;
+  // }
 
   console.log("pricedata", priceData);
 
   return (
     <>
-      <Divider />
-
       <div className="price-breakdown">
         <h5>Price breakdown</h5>
         <div className="breakdown-details">
-          {Object.entries(priceData)
+          {Object.entries(data)
             .sort()
             .map(([key, value]) => (
               <div className={`breakdown-item`} key={key}>

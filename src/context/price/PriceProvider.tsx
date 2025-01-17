@@ -7,7 +7,7 @@ interface PriceProviderProps {
   children: ReactNode;
 }
 
-export const PriceProvider = ({ children }: PriceProviderProps) => {
+export const PriceProvder = ({ children }: PriceProviderProps) => {
   const [priceData, setPriceData] = useState<PriceData | null>(null);
 
   return (

@@ -1,8 +1,10 @@
 export const parseMoney = (value: number): string => {
+  if (value === 0) return "-";
   return `${(value / 100).toFixed(2)} €`;
 };
 
 export const parseDistance = (distance: number): string => {
+  if (distance === 0) return "-";
   return distance >= 1000
     ? `${(distance / 1000).toFixed(2)} km`
     : `${distance} m`;

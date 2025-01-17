@@ -4,3 +4,11 @@ export const initialUserInputs = {
   latitude: 0,
   longitude: 0,
 };
+
+export const initialPricaData = {
+  cartValue: 0,
+  smallOrderSurcharge: 0,
+  deliveryFee: 0,
+  deliveryDistance: 0,
+  totalPrice: 0,
+};
