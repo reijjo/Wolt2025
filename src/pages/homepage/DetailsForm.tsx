@@ -43,12 +43,14 @@ export const DetailsForm = () => {
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setUserInputs((prev) => ({ ...prev, [name]: value }));
     invalidInput(name, value);
   };
 
   const calculatePrice = async (e: SyntheticEvent) => {
     e.preventDefault();
+
     console.log("userInputs", userInputs);
 
     const validation = validateUserInputs(userInputs);
@@ -92,8 +94,8 @@ export const DetailsForm = () => {
       {isLoading && <Loading />}
       <TextInput
         label="Venue slug"
-        name="venue"
-        id="venue"
+        name="venueSlug"
+        id="venueSlug"
         dataTestId="venueSlug"
         placeholder="Venue..."
         value={userInputs.venueSlug}
@@ -104,8 +106,8 @@ export const DetailsForm = () => {
       />
       <TextInput
         label="Cart value (EUR)"
-        name="cart"
-        id="cart"
+        name="cartValue"
+        id="cartValue"
         dataTestId="cartValue"
         placeholder="Value..."
         value={userInputs.cartValue || ""}
@@ -115,8 +117,8 @@ export const DetailsForm = () => {
       />
       <TextInput
         label="User latitude"
-        name="latitude"
-        id="latitude"
+        name="userLatitude"
+        id="userLatitude"
         dataTestId="userLatitude"
         placeholder="Latitude..."
         value={userInputs.userLatitude || ""}
@@ -127,8 +129,8 @@ export const DetailsForm = () => {
       />
       <TextInput
         label="User longitude"
-        name="longitude"
-        id="longitude"
+        name="userLongitude"
+        id="userLongitude"
         dataTestId="userLongitude"
         placeholder="Longitude..."
         value={userInputs.userLongitude || ""}

@@ -14,8 +14,8 @@ export const useGetLocation = () => {
   const updateLocation = (latitude: number, longitude: number) => {
     setUserInputs((prev) => ({
       ...prev,
-      latitude,
-      longitude,
+      userLatitude: latitude,
+      userLongitude: longitude,
     }));
   };
 

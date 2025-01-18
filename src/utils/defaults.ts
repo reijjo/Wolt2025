@@ -1,8 +1,8 @@
 export const initialUserInputs = {
-  venue: "home-assignment-venue-helsinki",
-  cart: "",
-  latitude: 0,
-  longitude: 0,
+  venueSlug: "home-assignment-venue-helsinki",
+  cartValue: "",
+  userLatitude: 0,
+  userLongitude: 0,
 };
 
 export const initialPriceData = {
