@@ -14,6 +14,14 @@ export const useValidInputs = () => {
     return cartRegex.test(input) && input.trim() !== "" && input.trim() !== ".";
   };
 
+  const isValidLatitude = (lat: number): boolean => {
+    return lat >= -90 && lat <= 90;
+  };
+
+  const isValidLongitude = (lon: number): boolean => {
+    return lon >= -180 && lon <= 180;
+  };
+
   const isPriceData = (data: unknown): data is PriceData => {
     return (
       typeof data === "object" &&
@@ -52,25 +60,32 @@ export const useValidInputs = () => {
       errors.venue = `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`;
     }
 
-    if (inputs.cartValue.toString().includes(",")) {
+    const cartString = inputs.cartValue.toString();
+    if (cartString.includes(",")) {
       errors.cartValue = "Change ',' to '.'";
-    } else if (!isValidCartInput(inputs.cartValue)) {
+    } else if (!isValidCartInput(cartString)) {
       errors.cartValue = "Cart value must be a number";
-    } else if (parseCart(inputs.cartValue) === 0) {
+    } else if (parseCart(cartString) === 0) {
       errors.cartValue = "Cart value is required";
     } else {
-      const parsedCart = parseCart(inputs.cartValue);
+      const parsedCart = parseCart(cartString);
       if (parsedCart === null) {
         errors.cart = "Invalid cart value";
       }
     }
 
-    if (!isValidNumber(parseNumber(inputs.userLatitude))) {
-      errors.latitude = "Latitude must be a number";
+    const parsedLat = parseNumber(inputs.userLatitude);
+    if (!isValidNumber(parsedLat)) {
+      errors.userLatitude = "Latitude must be a number";
+    } else if (!isValidLatitude(parsedLat)) {
+      errors.userLatitude = "Latitude must be between -90 and 90";
     }
 
-    if (!isValidNumber(parseNumber(inputs.userLongitude))) {
-      errors.longitude = "Longitude must be a number";
+    const parsedLon = parseNumber(inputs.userLongitude);
+    if (!isValidNumber(parsedLon)) {
+      errors.userLongitude = "Longitude must be a number";
+    } else if (!isValidLongitude(parsedLon)) {
+      errors.userLongitude = "Longitude must be between -180 and 180";
     }
 
     return {

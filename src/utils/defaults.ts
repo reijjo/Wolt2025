@@ -1,6 +1,6 @@
 export const initialUserInputs = {
   venueSlug: "home-assignment-venue-helsinki",
-  cartValue: "",
+  cartValue: 0,
   userLatitude: 0,
   userLongitude: 0,
 };

@@ -34,13 +34,4 @@ describe("DetailsForm", () => {
     expect(userLot).toBeInTheDocument();
     expect(location).toBeInTheDocument();
   });
-
-  // test("works with mock data", async () => {
-  //   const inputs: UserInputs = {
-  //     venueSlug: "mock-venue",
-  //     cartValue: '1000',
-  //     userLatitude: 1.2345,
-  //     userLongitude: 1.2345,
-  //   };
-  // });
 });

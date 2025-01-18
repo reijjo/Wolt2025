@@ -19,7 +19,6 @@ export const usePriceCalculations = () => {
   const getOrderInfo = async (inputs: UserInputs) => {
     setPriceData(initialPriceData);
 
-    // try {
     const [specsResult, venueResult] = await Promise.all([
       fetchSpecs(inputs.venueSlug),
       fetchVenueLocation(inputs.venueSlug),
@@ -66,7 +65,7 @@ export const usePriceCalculations = () => {
     console.log("delivery", specs);
 
     const { pricing, noSurcharge } = specs;
-    const cartValue = parseCart(inputs.cartValue);
+    const cartValue = parseCart(inputs.cartValue.toString());
     const smallOrderSurcharge = Math.max(0, noSurcharge - cartValue);
 
     const range = pricing.distanceRanges.find(

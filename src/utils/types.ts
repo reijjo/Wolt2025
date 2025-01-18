@@ -1,6 +1,6 @@
 export interface UserInputs {
   venueSlug: string;
-  cartValue: string;
+  cartValue: number;
   userLatitude: number;
   userLongitude: number;
 }

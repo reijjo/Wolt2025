@@ -51,8 +51,6 @@ export const DetailsForm = () => {
   const calculatePrice = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    console.log("userInputs", userInputs);
-
     const validation = validateUserInputs(userInputs);
     if (!validation.isValid) {
       setErrors(validation.errors);
@@ -98,7 +96,7 @@ export const DetailsForm = () => {
         id="venueSlug"
         dataTestId="venueSlug"
         placeholder="Venue..."
-        value={userInputs.venueSlug}
+        value={userInputs.venueSlug.toString()}
         onChange={handleInput}
         onFocus={handleFocus}
         onBlur={handleBlur}
