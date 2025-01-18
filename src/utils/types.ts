@@ -1,8 +1,8 @@
 export interface UserInputs {
-  venue: string;
-  cart: string;
-  latitude: number;
-  longitude: number;
+  venueSlug: string;
+  cartValue: string;
+  userLatitude: number;
+  userLongitude: number;
 }
 
 export interface LonLat {

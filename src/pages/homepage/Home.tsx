@@ -11,7 +11,6 @@ export const Home = () => {
       <div className="container">
         <DetailsForm />
         <Divider />
-
         <PriceBreakdown />
       </div>
     </main>

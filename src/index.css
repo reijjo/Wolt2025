@@ -71,7 +71,7 @@ body {
   --ok-base: #01a73e;
   --ok-light: #b3e6c5;
   --ok-xlight: hsla(141, 46%, 88%, 1);
-  --ok-xxlight: #e9f6ee;
+  --ok-xxlight: hsl(143, 42%, 94%);
 }
 
 /* Headers */

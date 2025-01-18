@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getDistance } from "geolib";
 
 import { usePriceContext } from "../context";
-import { DeliverySpecs, LonLat, UserInputs, initialPricaData } from "../utils";
+import { DeliverySpecs, LonLat, UserInputs, initialPriceData } from "../utils";
 import { useApi } from "./useApi";
 import { useValidInputs } from "./useValidInputs";
 
@@ -14,15 +14,15 @@ export const usePriceCalculations = () => {
   );
   const { setPriceData } = usePriceContext();
   const { fetchSpecs, fetchVenueLocation } = useApi();
-  const { parseCart } = useValidInputs();
+  const { parseCart, isPriceData } = useValidInputs();
 
   const getOrderInfo = async (inputs: UserInputs) => {
-    setPriceData(initialPricaData);
+    setPriceData(initialPriceData);
 
     // try {
     const [specsResult, venueResult] = await Promise.all([
-      fetchSpecs(inputs.venue),
-      fetchVenueLocation(inputs.venue),
+      fetchSpecs(inputs.venueSlug),
+      fetchVenueLocation(inputs.venueSlug),
     ]);
 
     console.log("venue", venueResult);
@@ -41,8 +41,8 @@ export const usePriceCalculations = () => {
 
     const dist = getDistance(
       {
-        latitude: inputs.latitude,
-        longitude: inputs.longitude,
+        latitude: inputs.userLatitude,
+        longitude: inputs.userLongitude,
       },
       {
         latitude: venueResult.lat,
@@ -51,10 +51,6 @@ export const usePriceCalculations = () => {
     );
 
     return { specs: specsResult, distance: dist };
-    // } catch (error: unknown) {
-    //   console.error("Error getting venues", error);
-    //   throw error;
-    // }
   };
 
   const getPrice = (
@@ -70,7 +66,7 @@ export const usePriceCalculations = () => {
     console.log("delivery", specs);
 
     const { pricing, noSurcharge } = specs;
-    const cartValue = parseCart(inputs.cart);
+    const cartValue = parseCart(inputs.cartValue);
     const smallOrderSurcharge = Math.max(0, noSurcharge - cartValue);
 
     const range = pricing.distanceRanges.find(
@@ -100,6 +96,10 @@ export const usePriceCalculations = () => {
       deliveryDistance: distance,
       totalPrice,
     };
+
+    if (!isPriceData(calculatedPrice)) {
+      throw new Error("Invalid price data");
+    }
 
     setPriceData(calculatedPrice);
     return calculatedPrice;

@@ -5,7 +5,7 @@ export const initialUserInputs = {
   longitude: 0,
 };
 
-export const initialPricaData = {
+export const initialPriceData = {
   cartValue: 0,
   smallOrderSurcharge: 0,
   deliveryFee: 0,

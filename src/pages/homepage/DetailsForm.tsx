@@ -49,11 +49,11 @@ export const DetailsForm = () => {
 
   const calculatePrice = async (e: SyntheticEvent) => {
     e.preventDefault();
+    console.log("userInputs", userInputs);
 
     const validation = validateUserInputs(userInputs);
     if (!validation.isValid) {
       setErrors(validation.errors);
-      console.log("all errors", errors);
       showNotification(`Please check your inputs`, "error", 5);
       return;
     }
@@ -68,10 +68,6 @@ export const DetailsForm = () => {
       }
 
       const { distance, specs } = infoResult ?? {};
-
-      console.log("distance", distance);
-      console.log("specs", specs);
-
       const priceResult = getPrice(
         userInputs,
         distance,
@@ -88,15 +84,19 @@ export const DetailsForm = () => {
   };
 
   return (
-    <form className="form-details" onSubmit={getBrowserLocation}>
+    <form
+      className="form-details"
+      onSubmit={getBrowserLocation}
+      data-test-id="formDetails"
+    >
       {isLoading && <Loading />}
       <TextInput
         label="Venue slug"
         name="venue"
         id="venue"
-        dataTestId="venuSlug"
+        dataTestId="venueSlug"
         placeholder="Venue..."
-        value={userInputs.venue}
+        value={userInputs.venueSlug}
         onChange={handleInput}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -108,7 +108,7 @@ export const DetailsForm = () => {
         id="cart"
         dataTestId="cartValue"
         placeholder="Value..."
-        value={userInputs.cart || ""}
+        value={userInputs.cartValue || ""}
         onChange={handleInput}
         onFocus={handleFocus}
         errors={errors}
@@ -119,7 +119,7 @@ export const DetailsForm = () => {
         id="latitude"
         dataTestId="userLatitude"
         placeholder="Latitude..."
-        value={userInputs.latitude || ""}
+        value={userInputs.userLatitude || ""}
         onChange={handleInput}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -131,7 +131,7 @@ export const DetailsForm = () => {
         id="longitude"
         dataTestId="userLongitude"
         placeholder="Longitude..."
-        value={userInputs.longitude || ""}
+        value={userInputs.userLongitude || ""}
         onChange={handleInput}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -153,10 +153,10 @@ export const DetailsForm = () => {
           children="Calculate delivery price"
           onClick={calculatePrice}
           disabled={
-            !userInputs.latitude ||
-            !userInputs.longitude ||
-            !userInputs.cart ||
-            !userInputs.venue
+            !userInputs.userLatitude ||
+            !userInputs.userLongitude ||
+            !userInputs.cartValue ||
+            !userInputs.venueSlug
           }
         />
       </div>

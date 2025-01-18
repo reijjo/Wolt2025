@@ -13,7 +13,6 @@
 }
 
 .notification-success {
-  color: var(--ok-dark);
-  border-color: var(--ok-dark);
-  background-color: var(--ok-xxlight);
+  color: white;
+  background-color: var(--background-600);
 }

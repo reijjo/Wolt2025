@@ -1,4 +1,4 @@
-import { UserInputs } from "../utils";
+import { PriceData, UserInputs } from "../utils";
 
 export const useValidInputs = () => {
   const isValidNumber = (input: unknown): input is number => {
@@ -14,6 +14,23 @@ export const useValidInputs = () => {
     return cartRegex.test(input) && input.trim() !== "" && input.trim() !== ".";
   };
 
+  const isPriceData = (data: unknown): data is PriceData => {
+    return (
+      typeof data === "object" &&
+      data !== null &&
+      "cartValue" in data &&
+      "smallOrderSurcharge" in data &&
+      "deliveryFee" in data &&
+      "deliveryDistance" in data &&
+      "totalPrice" in data &&
+      typeof (data as PriceData).cartValue === "number" &&
+      typeof (data as PriceData).smallOrderSurcharge === "number" &&
+      typeof (data as PriceData).deliveryFee === "number" &&
+      typeof (data as PriceData).deliveryDistance === "number" &&
+      typeof (data as PriceData).totalPrice === "number"
+    );
+  };
+
   const parseNumber = (input: number): number => {
     return Number(input);
   };
@@ -26,33 +43,33 @@ export const useValidInputs = () => {
   const validateUserInputs = (inputs: UserInputs) => {
     const errors: { [key: string]: string } = {};
 
-    if (!isString(inputs.venue)) {
+    if (!isString(inputs.venueSlug)) {
       errors.venue = "Venue is required";
     } else if (
-      inputs.venue !== "home-assignment-venue-helsinki" &&
-      inputs.venue !== "home-assignment-venue-tallinn"
+      inputs.venueSlug !== "home-assignment-venue-helsinki" &&
+      inputs.venueSlug !== "home-assignment-venue-tallinn"
     ) {
       errors.venue = `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`;
     }
 
-    if (inputs.cart.toString().includes(",")) {
-      errors.cart = "Change ',' to '.'";
-    } else if (!isValidCartInput(inputs.cart)) {
-      errors.cart = "Cart value must be a number";
-    } else if (parseCart(inputs.cart) === 0) {
-      errors.cart = "Cart value is required";
+    if (inputs.cartValue.toString().includes(",")) {
+      errors.cartValue = "Change ',' to '.'";
+    } else if (!isValidCartInput(inputs.cartValue)) {
+      errors.cartValue = "Cart value must be a number";
+    } else if (parseCart(inputs.cartValue) === 0) {
+      errors.cartValue = "Cart value is required";
     } else {
-      const parsedCart = parseCart(inputs.cart);
+      const parsedCart = parseCart(inputs.cartValue);
       if (parsedCart === null) {
         errors.cart = "Invalid cart value";
       }
     }
 
-    if (!isValidNumber(parseNumber(inputs.latitude))) {
+    if (!isValidNumber(parseNumber(inputs.userLatitude))) {
       errors.latitude = "Latitude must be a number";
     }
 
-    if (!isValidNumber(parseNumber(inputs.longitude))) {
+    if (!isValidNumber(parseNumber(inputs.userLongitude))) {
       errors.longitude = "Longitude must be a number";
     }
 
@@ -63,6 +80,7 @@ export const useValidInputs = () => {
   };
 
   return {
+    isPriceData,
     parseCart,
     validateUserInputs,
   };
