@@ -1,8 +1,8 @@
 import "./Notification.css";
 
-interface NotificationProps {
+export interface NotificationProps {
   message?: string;
-  type?: string;
+  type?: "error" | "success";
 }
 
 export const Notification = ({ message, type }: NotificationProps) => {

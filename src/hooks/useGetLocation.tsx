@@ -3,14 +3,12 @@ import { SyntheticEvent, useState } from "react";
 import { fetchIpLocation } from "../api/api";
 import { Modal } from "../components";
 import { useModalContext } from "../context";
-// import { useDetailsForm } from "./useDetailsForm";
 import { UserInputs, initialUserInputs } from "../utils";
 
 export const useGetLocation = () => {
   const [useIp, setUseIp] = useState(false);
   const [userInputs, setUserInputs] = useState<UserInputs>(initialUserInputs);
 
-  // const { setUserInputs } = useDetailsForm();
   const { closeModal, openModal } = useModalContext();
 
   const updateLocation = (latitude: number, longitude: number) => {
@@ -22,7 +20,6 @@ export const useGetLocation = () => {
   };
 
   const getIpLocation = async () => {
-    console.log("WHAT IS THIS");
     try {
       const data = await fetchIpLocation();
       if (data) {

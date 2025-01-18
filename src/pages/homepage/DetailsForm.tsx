@@ -2,37 +2,26 @@ import "./DetailsForm.css";
 
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
-import {
-  Button,
-  Divider,
-  Loading,
-  Notification,
-  TextInput,
-} from "../../components";
+import { Button, Loading, Notification, TextInput } from "../../components";
 import { useModalContext } from "../../context";
-import {
-  useDetailsForm,
-  usePriceCalculations,
-  useValidInputs,
-} from "../../hooks";
+import { useApi } from "../../hooks/useApi";
+import { useDetailsForm } from "../../hooks/useDetailsForm";
 import { useGetLocation } from "../../hooks/useGetLocation";
+import { usePriceCalculations } from "../../hooks/usePriceCalculations";
+import { useValidInputs } from "../../hooks/useValidInputs";
 import { DeliverySpecs } from "../../utils";
 
 export const DetailsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {
-    // userInputs,
-    // setUserInputs,
-    // useIp,
-    // getBrowserLocation,
     errors,
     setErrors,
     notification,
     showNotification,
+    clearNotification,
     handleFocus,
     handleBlur,
     invalidInput,
-    // getIpLocation,
   } = useDetailsForm();
   const { validateUserInputs } = useValidInputs();
   const { getOrderInfo, getPrice } = usePriceCalculations();
@@ -43,10 +32,10 @@ export const DetailsForm = () => {
     userInputs,
     setUserInputs,
   } = useGetLocation();
+  const { handleApiErrors } = useApi();
   const { closeModal } = useModalContext();
 
   useEffect(() => {
-    console.log("useIp", useIp);
     if (useIp) {
       getIpLocation();
     }
@@ -65,21 +54,35 @@ export const DetailsForm = () => {
     if (!validation.isValid) {
       setErrors(validation.errors);
       console.log("all errors", errors);
-      showNotification(`Check your inputs`, 5000);
+      showNotification(`Please check your inputs`, "error", 5);
       return;
     }
 
     try {
       setIsLoading(true);
+      clearNotification();
 
       const infoResult = await getOrderInfo(userInputs);
+      if (!infoResult) {
+        throw new Error("Failed to get order information");
+      }
+
       const { distance, specs } = infoResult ?? {};
 
-      getPrice(userInputs, distance ?? 0, specs as DeliverySpecs);
+      console.log("distance", distance);
+      console.log("specs", specs);
+
+      const priceResult = getPrice(
+        userInputs,
+        distance,
+        specs as DeliverySpecs,
+      );
+      if (priceResult) {
+        showNotification("Thanks for the order!", "success", 5);
+      }
     } catch (error: unknown) {
-      console.log("error fetching order info", error);
+      showNotification(handleApiErrors(error), "error", 5);
     } finally {
-      showNotification("", 0);
       setIsLoading(false);
     }
   };
@@ -134,8 +137,9 @@ export const DetailsForm = () => {
         onBlur={handleBlur}
         errors={errors}
       />
-      {notification && <Notification message={notification} type="error" />}
-      <Divider />
+      {notification && (
+        <Notification message={notification.message} type={notification.type} />
+      )}
       <div className="button-group">
         <Button
           className="btn btn-filled"

@@ -11,3 +11,9 @@
   border-color: var(--error-base);
   background-color: var(--error-xxlight);
 }
+
+.notification-success {
+  color: var(--ok-dark);
+  border-color: var(--ok-dark);
+  background-color: var(--ok-xxlight);
+}

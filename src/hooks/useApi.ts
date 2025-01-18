@@ -1,3 +1,5 @@
+import { isAxiosError } from "axios";
+
 import { fetchDeliverySpecs, fetchVenue } from "../api/api";
 
 export const useApi = () => {
@@ -7,6 +9,7 @@ export const useApi = () => {
       return specs;
     } catch (error: unknown) {
       console.error("Error fetching delivery specs", error);
+      throw new Error("Error fetching delivery info");
     }
   };
 
@@ -16,8 +19,19 @@ export const useApi = () => {
       return venue;
     } catch (error: unknown) {
       console.error("Error fetching venue location", error);
+      throw new Error("Error fetching venue location");
     }
   };
 
-  return { fetchSpecs, fetchVenueLocation };
+  const handleApiErrors = (error: unknown) => {
+    if (error instanceof Error) {
+      return error.message;
+    } else if (isAxiosError(error)) {
+      return "An error occurred while fetching data";
+    } else {
+      return "An unexpected error occurred";
+    }
+  };
+
+  return { fetchSpecs, fetchVenueLocation, handleApiErrors };
 };

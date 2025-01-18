@@ -18,38 +18,43 @@ export const usePriceCalculations = () => {
 
   const getOrderInfo = async (inputs: UserInputs) => {
     setPriceData(initialPricaData);
-    try {
-      const [specsResult, venueResult] = await Promise.all([
-        fetchSpecs(inputs.venue),
-        fetchVenueLocation(inputs.venue),
-      ]);
 
-      if (!specsResult || !venueResult) {
-        console.error(!specsResult ? "No specs found" : "No venue found");
-        setDeliverySpecs(null);
-        setVenue(null);
-        return null;
-      }
+    // try {
+    const [specsResult, venueResult] = await Promise.all([
+      fetchSpecs(inputs.venue),
+      fetchVenueLocation(inputs.venue),
+    ]);
 
-      setDeliverySpecs(specsResult);
-      setVenue(venueResult);
+    console.log("venue", venueResult);
 
-      const dist = getDistance(
-        {
-          latitude: inputs.latitude,
-          longitude: inputs.longitude,
-        },
-        {
-          latitude: venueResult.lat,
-          longitude: venueResult.lon,
-        },
+    if (!specsResult || !venueResult) {
+      console.error(!specsResult ? "No specs found" : "No venue found");
+      setDeliverySpecs(null);
+      setVenue(null);
+      throw new Error(
+        !specsResult ? "Can't find delivery information" : "No venue found",
       );
-
-      return { specs: specsResult, distance: dist };
-    } catch (error: unknown) {
-      console.error("Error getting venues", error);
-      return null;
     }
+
+    setDeliverySpecs(specsResult);
+    setVenue(venueResult);
+
+    const dist = getDistance(
+      {
+        latitude: inputs.latitude,
+        longitude: inputs.longitude,
+      },
+      {
+        latitude: venueResult.lat,
+        longitude: venueResult.lon,
+      },
+    );
+
+    return { specs: specsResult, distance: dist };
+    // } catch (error: unknown) {
+    //   console.error("Error getting venues", error);
+    //   throw error;
+    // }
   };
 
   const getPrice = (
@@ -57,51 +62,47 @@ export const usePriceCalculations = () => {
     distance: number,
     specs: DeliverySpecs,
   ) => {
-    if (!specs || !distance) {
-      console.error(!specs ? "No specs found" : "No distance found");
-      return null;
+    if (!specs) {
+      console.error("No delivery info found");
+      throw new Error("No specs found");
     }
 
-    try {
-      const { pricing, noSurcharge } = specs;
-      const cartValue = parseCart(inputs.cart);
+    console.log("delivery", specs);
 
-      let smallOrderSurcharge = Math.max(0, noSurcharge - cartValue);
-      if (smallOrderSurcharge < 0) {
-        smallOrderSurcharge = 0;
-      }
-      console.log("small order surcharge", smallOrderSurcharge);
+    const { pricing, noSurcharge } = specs;
+    const cartValue = parseCart(inputs.cart);
+    const smallOrderSurcharge = Math.max(0, noSurcharge - cartValue);
 
-      const distanceRanges = pricing.distanceRanges.find(
-        (range) =>
-          distance >= range.min && (distance < range.max || range.max === 0),
-      );
+    const range = pricing.distanceRanges.find(
+      (range) =>
+        distance >= range.min && (distance < range.max || range.max === 0),
+    );
 
-      if (!distanceRanges) {
-        console.error("Delivery distance out of range");
-        return null;
-      }
-
-      const { a, b } = distanceRanges;
-      const deliveryFee =
-        pricing.basePrice + a + Math.round((b * distance) / 10);
-
-      const totalPrice = cartValue + deliveryFee + smallOrderSurcharge;
-
-      const calculatedPrice = {
-        cartValue,
-        smallOrderSurcharge,
-        deliveryFee,
-        deliveryDistance: distance,
-        totalPrice,
-      };
-
-      setPriceData(calculatedPrice);
-      return calculatedPrice;
-    } catch (error: unknown) {
-      console.error("Error getting price", error);
-      return null;
+    if (range && range.max === 0 && distance >= range.min) {
+      console.error("Delivery distance out of range");
+      throw new Error("Delivery distance out of range");
     }
+
+    if (!range) {
+      console.log("LOGGG Invalid delivery distance");
+      throw new Error("Invalid delivery distance");
+    }
+
+    const { a, b } = range;
+    const deliveryFee = pricing.basePrice + a + Math.round((b * distance) / 10);
+
+    const totalPrice = cartValue + deliveryFee + smallOrderSurcharge;
+
+    const calculatedPrice = {
+      cartValue,
+      smallOrderSurcharge,
+      deliveryFee,
+      deliveryDistance: distance,
+      totalPrice,
+    };
+
+    setPriceData(calculatedPrice);
+    return calculatedPrice;
   };
 
   return {
