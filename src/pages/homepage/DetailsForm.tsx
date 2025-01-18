@@ -37,9 +37,11 @@ export const DetailsForm = () => {
 
   useEffect(() => {
     if (useIp) {
-      getIpLocation();
+      getIpLocation().catch((error) => {
+        showNotification(handleApiErrors(error), "error", 5);
+      });
     }
-  }, [useIp, getIpLocation, closeModal]);
+  }, [useIp, getIpLocation, closeModal, handleApiErrors, showNotification]);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

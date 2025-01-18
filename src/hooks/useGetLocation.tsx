@@ -27,6 +27,7 @@ export const useGetLocation = () => {
       }
     } catch (error: unknown) {
       console.error("Error getting location by ip", error);
+      throw new Error("Error getting location by ip");
     } finally {
       setUseIp(false);
       closeModal();
