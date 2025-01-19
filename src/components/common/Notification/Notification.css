@@ -3,7 +3,7 @@
   border-radius: 5rem;
   padding: 0.5rem 1rem;
   text-align: center;
-  min-height: 2.5rem;
+  height: 2.5rem;
 }
 
 .notification-error {
@@ -14,5 +14,6 @@
 
 .notification-success {
   color: white;
+  border-color: transparent;
   background-color: var(--background-600);
 }

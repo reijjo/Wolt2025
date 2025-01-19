@@ -56,6 +56,8 @@ body {
   --background-900: hsl(219, 100%, 34%);
   --background-950: #031e54;
 
+  --test-: #245370;
+
   --text-light: hsl(220, 93%, 97%);
   --text-dark: hsl(220, 93%, 3%);
 

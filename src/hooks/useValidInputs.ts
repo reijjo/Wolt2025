@@ -57,7 +57,7 @@ export const useValidInputs = () => {
       inputs.venueSlug !== "home-assignment-venue-helsinki" &&
       inputs.venueSlug !== "home-assignment-venue-tallinn"
     ) {
-      errors.venue = `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`;
+      errors.venueSlug = `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`;
     }
 
     const cartString = inputs.cartValue.toString();
@@ -70,7 +70,7 @@ export const useValidInputs = () => {
     } else {
       const parsedCart = parseCart(cartString);
       if (parsedCart === null) {
-        errors.cart = "Invalid cart value";
+        errors.cartValue = "Invalid cart value";
       }
     }
 
