@@ -67,6 +67,8 @@ export const useValidInputs = () => {
       errors.cartValue = inputErrors.cartInvalid;
     } else if (parseCart(cartString) === 0) {
       errors.cartValue = inputErrors.cartRequired;
+    } else if (parseCart(cartString) < 0) {
+      errors.cartValue = "Cart value can't be negative";
     } else {
       const parsedCart = parseCart(cartString);
       if (parsedCart === null) {

@@ -13,6 +13,6 @@ export const fetchSpecsMock = {
 };
 
 export const fetchVenueLocationMock = {
-  lon: 60.17012143,
-  lat: 24.92813512,
+  lat: 60.17012143,
+  lon: 24.92813512,
 };

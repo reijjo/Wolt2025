@@ -64,6 +64,11 @@ export const DetailsForm = () => {
       setIsLoading(true);
       clearNotification();
 
+      const validationResult = validateUserInputs(userInputs);
+      if (!validationResult.isValid) {
+        throw new Error(JSON.stringify(validationResult.errors));
+      }
+
       const infoResult = await getOrderInfo(userInputs);
       if (!infoResult) {
         throw new Error("Failed to get order information");

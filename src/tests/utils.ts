@@ -15,7 +15,7 @@ export const findRawValue = (labelText: string): string | null => {
 };
 
 export const exampleInputs: UserInputs = {
-  venueSlug: "home-assingment-venue-helsinki",
+  venueSlug: "home-assignment-venue-helsinki",
   cartValue: 10,
   userLatitude: 60.1797,
   userLongitude: 24.9344,

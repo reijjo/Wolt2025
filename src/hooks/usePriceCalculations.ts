@@ -71,14 +71,14 @@ export const usePriceCalculations = () => {
         distance >= range.min && (distance < range.max || range.max === 0),
     );
 
+    if (!range) {
+      console.error(" Invalid delivery distance");
+      throw new Error("Invalid delivery distance");
+    }
+
     if (range && range.max === 0 && distance >= range.min) {
       console.error("Delivery distance out of range");
       throw new Error("Delivery distance out of range");
-    }
-
-    if (!range) {
-      console.log("LOGGG Invalid delivery distance");
-      throw new Error("Invalid delivery distance");
     }
 
     const { a, b } = range;

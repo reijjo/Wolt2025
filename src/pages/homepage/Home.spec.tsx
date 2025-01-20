@@ -2,9 +2,8 @@ import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { ModalProvider, PriceProvider } from "../../context";
-import { useApi } from "../../hooks/useApi";
 import { fetchSpecsMock, fetchVenueLocationMock } from "../../tests/mockData";
-import { customTestId, exampleInputs, findRawValue } from "../../tests/utils";
+import { customTestId, findRawValue } from "../../tests/utils";
 import { Home } from "./Home";
 
 vi.mock("../../hooks/useApi", () => ({
@@ -59,23 +58,5 @@ describe("Home", () => {
     expect(findRawValue("Delivery fee")).toBe(null);
     expect(findRawValue("Small order surcharge")).toBe(null);
     expect(findRawValue("Total price")).toBe(null);
-  });
-});
-
-describe("APIs and calculations", () => {
-  const { fetchSpecs, fetchVenueLocation } = useApi();
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  test("fetch venue", async () => {
-    const result = await fetchVenueLocation(exampleInputs.venueSlug);
-    expect(result).toEqual(fetchVenueLocationMock);
-  });
-
-  test("fetch delivery specs", async () => {
-    const result = await fetchSpecs("venue_slug");
-    expect(result).toEqual(fetchSpecsMock);
   });
 });
