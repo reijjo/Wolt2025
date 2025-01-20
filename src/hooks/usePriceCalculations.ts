@@ -24,8 +24,6 @@ export const usePriceCalculations = () => {
       fetchVenueLocation(inputs.venueSlug),
     ]);
 
-    console.log("venue", venueResult);
-
     if (!specsResult || !venueResult) {
       console.error(!specsResult ? "No specs found" : "No venue found");
       setDeliverySpecs(null);

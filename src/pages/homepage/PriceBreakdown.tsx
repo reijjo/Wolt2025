@@ -19,7 +19,11 @@ export const PriceBreakdown = () => {
         {Object.entries(data)
           .sort()
           .map(([key, value]) => (
-            <div className={`breakdown-item`} key={key} data-test-id={key}>
+            <div
+              className={`breakdown-item`}
+              key={key}
+              data-test-id={`${key}-result`}
+            >
               <p className="breakdown-label">{parseName(key)}</p>{" "}
               <span data-raw-value={value}>{formatValue(key, value)}</span>
             </div>

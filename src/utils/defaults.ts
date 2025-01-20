@@ -6,9 +6,23 @@ export const initialUserInputs = {
 };
 
 export const initialPriceData = {
-  cartValue: 0,
-  smallOrderSurcharge: 0,
-  deliveryFee: 0,
-  deliveryDistance: 0,
-  totalPrice: 0,
+  cartValue: null,
+  smallOrderSurcharge: null,
+  deliveryFee: null,
+  deliveryDistance: null,
+  totalPrice: null,
+};
+
+export const inputErrors = {
+  venueEmpty: "Venue is required",
+  venueInvalid: `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`,
+  cartComma: "Change ',' to '.'",
+  cartEmpty: "Cart value is required",
+  cartInvalid: "Cart value must be a number",
+  cartRequired: "Cart value is required",
+  cartError: "Invalid cart value",
+  latitudeNotNumber: "Latitude must be a number",
+  latitudeInvalid: "Latitude must be between -90 and 90",
+  longitudeNotNumber: "Longitude must be a number",
+  longitudeInvalid: "Longitude must be between -180 and 180",
 };

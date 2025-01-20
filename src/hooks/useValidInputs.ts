@@ -1,4 +1,4 @@
-import { PriceData, UserInputs } from "../utils";
+import { PriceData, UserInputs, inputErrors } from "../utils";
 
 export const useValidInputs = () => {
   const isValidNumber = (input: unknown): input is number => {
@@ -52,40 +52,40 @@ export const useValidInputs = () => {
     const errors: { [key: string]: string } = {};
 
     if (!isString(inputs.venueSlug)) {
-      errors.venue = "Venue is required";
+      errors.venue = inputErrors.venueEmpty;
     } else if (
       inputs.venueSlug !== "home-assignment-venue-helsinki" &&
       inputs.venueSlug !== "home-assignment-venue-tallinn"
     ) {
-      errors.venueSlug = `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`;
+      errors.venueSlug = inputErrors.venueInvalid;
     }
 
     const cartString = inputs.cartValue.toString();
     if (cartString.includes(",")) {
-      errors.cartValue = "Change ',' to '.'";
+      errors.cartValue = inputErrors.cartComma;
     } else if (!isValidCartInput(cartString)) {
-      errors.cartValue = "Cart value must be a number";
+      errors.cartValue = inputErrors.cartInvalid;
     } else if (parseCart(cartString) === 0) {
-      errors.cartValue = "Cart value is required";
+      errors.cartValue = inputErrors.cartRequired;
     } else {
       const parsedCart = parseCart(cartString);
       if (parsedCart === null) {
-        errors.cartValue = "Invalid cart value";
+        errors.cartValue = inputErrors.cartError;
       }
     }
 
     const parsedLat = parseNumber(inputs.userLatitude);
     if (!isValidNumber(parsedLat)) {
-      errors.userLatitude = "Latitude must be a number";
+      errors.userLatitude = inputErrors.latitudeNotNumber;
     } else if (!isValidLatitude(parsedLat)) {
-      errors.userLatitude = "Latitude must be between -90 and 90";
+      errors.userLatitude = inputErrors.latitudeInvalid;
     }
 
     const parsedLon = parseNumber(inputs.userLongitude);
     if (!isValidNumber(parsedLon)) {
-      errors.userLongitude = "Longitude must be a number";
+      errors.userLongitude = inputErrors.longitudeNotNumber;
     } else if (!isValidLongitude(parsedLon)) {
-      errors.userLongitude = "Longitude must be between -180 and 180";
+      errors.userLongitude = inputErrors.longitudeInvalid;
     }
 
     return {

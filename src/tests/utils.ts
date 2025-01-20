@@ -6,16 +6,17 @@ export const customTestId = (id: string) => {
   return document.querySelector(`[data-test-id=${id}]`) as Element;
 };
 
-export const findRawValue = (text: string) => {
-  return screen
-    .getByText(text)
-    .querySelector("span")
-    ?.getAttribute("data-raw-value");
+export const findRawValue = (labelText: string): string | null => {
+  const labelElement = screen.getByText(labelText);
+  const span = labelElement?.parentElement?.querySelector(
+    "span[data-raw-value]",
+  );
+  return span ? span.getAttribute("data-raw-value") : null;
 };
 
 export const exampleInputs: UserInputs = {
   venueSlug: "home-assingment-venue-helsinki",
-  cartValue: 1000,
+  cartValue: 10,
   userLatitude: 60.1797,
   userLongitude: 24.9344,
 };

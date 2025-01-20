@@ -1,19 +1,31 @@
-import { render } from "@testing-library/react";
-import { beforeEach, describe, expect, test } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { ModalProvider, PriceProvider } from "../../context";
+import { useApi } from "../../hooks/useApi";
+import { fetchSpecsMock, fetchVenueLocationMock } from "../../tests/mockData";
+import { customTestId, exampleInputs, findRawValue } from "../../tests/utils";
 import { Home } from "./Home";
 
+vi.mock("../../hooks/useApi", () => ({
+  useApi: vi.fn(() => ({
+    fetchSpecs: vi.fn().mockResolvedValue(fetchSpecsMock),
+    fetchVenueLocation: vi.fn().mockResolvedValue(fetchVenueLocationMock),
+    handleApiErrors: vi.fn(),
+  })),
+}));
+
+beforeEach(() => {
+  render(
+    <ModalProvider>
+      <PriceProvider>
+        <Home />
+      </PriceProvider>
+    </ModalProvider>,
+  );
+});
+
 describe("Home", () => {
-  beforeEach(() => {
-    render(
-      <ModalProvider>
-        <PriceProvider>
-          <Home />
-        </PriceProvider>
-      </ModalProvider>,
-    );
-  });
   test("renders Home component", () => {
     const main = document.querySelector("main");
     expect(main).toBeInTheDocument();
@@ -26,5 +38,44 @@ describe("Home", () => {
     expect(document.querySelector("h1")?.textContent).toBe(
       "Delivery Order Price Calculator",
     );
+
+    const priceBreakdown = screen.getByText("Price breakdown");
+    expect(priceBreakdown).toBeInTheDocument();
+  });
+
+  test("raw-data to be null", async () => {
+    const venue = customTestId("venueSlug");
+    const value = customTestId("cartValue");
+    const latitude = customTestId("userLatitude");
+    const longitude = customTestId("userLongitude");
+
+    expect(venue).toBeInTheDocument();
+    expect(value).toBeInTheDocument();
+    expect(latitude).toBeInTheDocument();
+    expect(longitude).toBeInTheDocument();
+
+    expect(findRawValue("Cart value")).toBe(null);
+    expect(findRawValue("Delivery distance")).toBe(null);
+    expect(findRawValue("Delivery fee")).toBe(null);
+    expect(findRawValue("Small order surcharge")).toBe(null);
+    expect(findRawValue("Total price")).toBe(null);
+  });
+});
+
+describe("APIs and calculations", () => {
+  const { fetchSpecs, fetchVenueLocation } = useApi();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test("fetch venue", async () => {
+    const result = await fetchVenueLocation(exampleInputs.venueSlug);
+    expect(result).toEqual(fetchVenueLocationMock);
+  });
+
+  test("fetch delivery specs", async () => {
+    const result = await fetchSpecs("venue_slug");
+    expect(result).toEqual(fetchSpecsMock);
   });
 });

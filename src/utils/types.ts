@@ -11,11 +11,11 @@ export interface LonLat {
 }
 
 export interface PriceData {
-  cartValue: number;
-  smallOrderSurcharge: number;
-  deliveryFee: number;
-  deliveryDistance: number;
-  totalPrice: number;
+  cartValue: number | null;
+  smallOrderSurcharge: number | null;
+  deliveryFee: number | null;
+  deliveryDistance: number | null;
+  totalPrice: number | null;
 }
 
 export interface DeliveryPricing {

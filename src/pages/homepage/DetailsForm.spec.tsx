@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, test } from "vitest";
 
 import { ModalProvider, PriceProvider } from "../../context";
 import { customTestId, exampleInputs } from "../../tests/utils";
+import { inputErrors } from "../../utils";
 import { DetailsForm } from "./DetailsForm";
 
 describe("DetailsForm", () => {
@@ -54,5 +55,59 @@ describe("DetailsForm", () => {
     await user.type(userLot, exampleInputs.userLongitude.toString());
 
     expect(calculate).not.toBeDisabled();
+  });
+
+  test("invalid venue", async () => {
+    const user = userEvent.setup();
+
+    const venue = customTestId("venueSlug");
+    expect(venue).toBeInTheDocument();
+
+    await user.type(venue, "turku");
+    expect(screen.getByText(inputErrors.venueInvalid)).toBeInTheDocument();
+
+    await user.clear(venue);
+    await user.type(venue, "home-assignment-venue-helsinki");
+    expect(screen.queryByText(inputErrors.venueInvalid)).toBeNull();
+  });
+
+  test("invalid cart value", async () => {
+    const user = userEvent.setup();
+
+    const cart = customTestId("cartValue");
+    expect(cart).toBeInTheDocument();
+
+    await user.type(cart, "1000");
+    expect(screen.queryByText(inputErrors.cartInvalid)).toBeNull();
+
+    await user.clear(cart);
+    await user.type(cart, "10,00");
+    expect(screen.getByText(inputErrors.cartComma)).toBeInTheDocument();
+    await user.clear(cart);
+    await user.type(cart, "10.00");
+    expect(screen.queryByText(inputErrors.cartComma)).toBeNull();
+
+    await user.clear(cart);
+    await user.type(cart, "0");
+    expect(screen.getByText(inputErrors.cartRequired)).toBeInTheDocument();
+  });
+
+  test("invalid user latitude", async () => {
+    const user = userEvent.setup();
+
+    const userLat = customTestId("userLatitude");
+    expect(userLat).toBeInTheDocument();
+
+    await user.type(userLat, "-90.000001");
+    expect(screen.getByText(inputErrors.latitudeInvalid)).toBeInTheDocument();
+  });
+
+  test("invalid user longitude", async () => {
+    const user = userEvent.setup();
+    const userLot = customTestId("userLongitude");
+
+    expect(userLot).toBeInTheDocument();
+    await user.type(userLot, "10.00");
+    expect(screen.queryByText(inputErrors.longitudeInvalid)).toBeNull();
   });
 });
