@@ -191,7 +191,7 @@ describe("DetailsForm Calculations & APIs", () => {
       const validationResult = validateUserInputs(inputs);
       if (!validationResult.isValid) {
         expect(validationResult.errors.cartValue).toBe(
-          "Cart value must be a number",
+          "Cart minimum value is 0.01",
         );
         return;
       }
@@ -213,7 +213,7 @@ describe("DetailsForm Calculations & APIs", () => {
       const validationResult = validateUserInputs(inputs);
       if (!validationResult.isValid) {
         expect(validationResult.errors.cartValue).toBe(
-          "Cart value is required",
+          "Cart minimum value is 0.01",
         );
         return;
       }

@@ -157,7 +157,15 @@ test.describe("FORM FIELDS", () => {
     expect(await rawValues.nth(1).textContent()).toBe("1.12 km");
   });
 
-  test("gets location by IP", async ({ page }) => {
+  test("gets location by IP", async ({ browser }) => {
+    const context = await browser.newContext({
+      permissions: [],
+      geolocation: { latitude: 0, longitude: 0 },
+    });
+
+    const page = await context.newPage();
+    await page.goto("http://localhost:5173");
+
     const venue = page.locator('[data-test-id="venueSlug"]');
     const cart = page.locator('[data-test-id="cartValue"]');
     const userLatitude = page.locator('[data-test-id="userLatitude"]');
