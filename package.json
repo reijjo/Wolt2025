@@ -9,6 +9,8 @@
     "clean": "rm -rf **/dist **/build node_modules package-lock.json",
     "test": "NODE_ENV=test vitest",
     "test:coverage": "NODE_ENV=test vitest --coverage",
+    "test:e2e": "cd e2e && npm run test",
+    "test:ui": "cd e2e && npm run test:ui",
     "lint": "eslint .",
     "preview": "vite preview"
   },

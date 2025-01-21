@@ -1,14 +1,24 @@
 # Wolt 2025 Frontend Engineering Internship
 
+## What is this?
+
+- Delivery Order Price Calculator UI, or DOPC for short!
+- DOPC is an imaginary frontend which is capable of calculating the total price and price breakdown of a delivery order.
+- DOPC integrates with the Home Assignment API to fetch venue related data required to calculate the prices.
+
+## Running the application
+
 ## Testing the application
 
 ### Unit tests
 
 - Run `npm run test` in the root of the folder
 
-### e2e tests
+### End to End tests
 
+- Make sure that your application is running
 - Run `npm run test:e2e` in the root of the folder
+- Or run tests via graphical UI `npm run test:ui` (wait for the window to open and press green Play button on the top left)
 
 ## The task itself
 
