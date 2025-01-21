@@ -1,5 +1,5 @@
 export const parseMoney = (value: number): string => {
-  if (value === 0) return `0 €`;
+  if (value === 0) return `0.00 €`;
   return `${(value / 100).toFixed(2)} €`;
 };
 

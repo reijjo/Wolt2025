@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 5;
 }
 
 .modal-container {
@@ -20,6 +21,7 @@
   color: var(--text-dark);
   overflow: hidden;
   box-shadow: 0 0px 32px rgba(204, 250, 255, 0.55);
+  z-index: 10;
 }
 
 .modal-header {
