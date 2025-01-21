@@ -115,11 +115,11 @@ describe("PriceBreakdown", () => {
       .filter((element) => element.hasAttribute("data-raw-value"));
 
     rawValueElements.forEach((element) => {
-      expect(element).toHaveAttribute("data-raw-value", "0");
+      expect(element).toHaveAttribute("data-raw-value", null);
     });
   });
 
-  test.only("missing data fields", () => {
+  test("missing data fields", () => {
     const partialMockData = {
       cartValue: 1000,
       deliveryFee: 190,

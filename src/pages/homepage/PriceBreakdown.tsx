@@ -10,8 +10,6 @@ export const PriceBreakdown = () => {
 
   const data = isPriceData(priceData) ? priceData : initialPriceData;
 
-  console.log("pricedata", priceData);
-
   return (
     <div className="price-breakdown">
       <h5>Price breakdown</h5>

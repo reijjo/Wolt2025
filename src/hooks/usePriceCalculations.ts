@@ -60,8 +60,6 @@ export const usePriceCalculations = () => {
       throw new Error("No specs found");
     }
 
-    console.log("delivery", specs);
-
     const { pricing, noSurcharge } = specs;
     const cartValue = parseCart(inputs.cartValue.toString());
     const smallOrderSurcharge = Math.max(0, noSurcharge - cartValue);
