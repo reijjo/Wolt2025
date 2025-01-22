@@ -4,9 +4,9 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { usePriceContext } from "../../../context";
 import { customTestId } from "../../../tests/utils";
 import { PriceData } from "../../../utils";
-import { PriceBreakdown } from "./PriceBreakdown";
+import { PriceBreakdown } from "../PriceBreakdown/PriceBreakdown";
 
-vi.mock("../../context", () => ({
+vi.mock("../../../context", () => ({
   usePriceContext: vi.fn(),
 }));
 

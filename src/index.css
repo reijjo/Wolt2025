@@ -12,7 +12,7 @@ body {
 
   font-size: 1rem;
 
-  background-image: url("./assets/bg.jpeg");
+  background-image: url("./assets/bg.webp");
   background-size: 25%;
   background-repeat: repeat;
 
@@ -86,6 +86,10 @@ body {
 
 h1 {
   font-size: 2rem;
+
+  @media screen and (max-width: 950px) {
+    font-size: 1.75rem;
+  }
 }
 
 :is(h2, h5, h6) {

@@ -1,5 +1,4 @@
 .wrapper {
-  /* 12 grids */
   width: min(100%, 1366px);
   min-height: 100dvh;
   height: 100%;
@@ -12,13 +11,11 @@
   align-items: center;
   justify-content: center;
 
-  @media only screen and (max-width: 800px) {
-    /* 8 grids */
-    padding: 8px 16px 3rem;
+  @media only screen and (max-width: 950px) {
+    padding: 1.5rem 1rem;
   }
 
   @media only screen and (max-width: 481px) {
-    /* 4 grids */
     padding: 8px 8px 4rem;
     font-size: 0.925rem;
     font-size: 0.85rem;
@@ -26,7 +23,6 @@
 }
 
 .container {
-  /* border: 1px solid var(--primary); */
   border-radius: 1rem;
   background-color: var(--primary-50);
   color: var(--text-dark);
@@ -38,4 +34,8 @@
   justify-content: center;
   gap: 1rem;
   width: min(100%, 1024px);
+
+  @media screen and (max-width: 950px) {
+    width: min(100%, 480px);
+  }
 }

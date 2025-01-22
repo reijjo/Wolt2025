@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-import deliverypic from "../../../assets/delivery2.jpg";
+import deliverypic from "../../../assets/delivery2.webp";
 import { Button, Loading, TextInput } from "../../../components";
 import { useModalContext, usePriceContext } from "../../../context";
 import { useApi } from "../../../hooks/useApi";
@@ -118,8 +118,6 @@ export const DetailsForm = () => {
           src={deliverypic}
           alt="Delivery Order Price Calculator"
           title="Delivery Order Price Calculator"
-          width="100%"
-          height="100%"
         />
       </picture>
 
