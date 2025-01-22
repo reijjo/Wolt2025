@@ -12,15 +12,11 @@ body {
 
   font-size: 1rem;
 
-  /* background: linear-gradient(to bottom right, var(--background-950), var(--background-900)); */
-  background: radial-gradient(var(--background-900), var(--background-950))
-    no-repeat center / cover;
-  /* background-color: var(--background-950); */
-  background: radial-gradient(var(--background-900), var(--background-950));
+  background-image: url("./assets/bg.jpeg");
+  background-size: 25%;
+  background-repeat: repeat;
 
   color: var(--text-light);
-  /* background-color: #003cac; */
-  /* color: white; */
 }
 
 :root {
@@ -30,7 +26,7 @@ body {
   font-style: normal;
 
   /* Colors */
-  --primary: #00c2e8;
+  --primary: rgb(0, 194, 232);
   --primary-50: #ebfeff;
   --primary-100: #cefaff;
   --primary-200: #a2f3ff;
@@ -56,8 +52,6 @@ body {
   --background-900: hsl(219, 100%, 34%);
   --background-950: #031e54;
 
-  --test-: #245370;
-
   --text-light: hsl(220, 93%, 97%);
   --text-dark: hsl(220, 93%, 3%);
 
@@ -77,8 +71,8 @@ body {
 }
 
 :is(:not(input)):focus {
-  outline: 2px solid #007bff; /* Blue outline */
-  outline-offset: 2px; /* Creates space between element and outline */
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
 }
 
 /* Headers */

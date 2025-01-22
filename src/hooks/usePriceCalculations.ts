@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getDistance } from "geolib";
 
 import { usePriceContext } from "../context";
-import { DeliverySpecs, LonLat, UserInputs, initialPriceData } from "../utils";
+import { DeliverySpecs, LonLat, UserInputs } from "../utils";
 import { useApi } from "./useApi";
 import { useValidInputs } from "./useValidInputs";
 
@@ -17,8 +17,6 @@ export const usePriceCalculations = () => {
   const { parseCart, isPriceData } = useValidInputs();
 
   const getOrderInfo = async (inputs: UserInputs) => {
-    setPriceData(initialPriceData);
-
     const [specsResult, venueResult] = await Promise.all([
       fetchSpecs(inputs.venueSlug),
       fetchVenueLocation(inputs.venueSlug),
@@ -70,7 +68,7 @@ export const usePriceCalculations = () => {
     );
 
     if (!range) {
-      console.error(" Invalid delivery distance");
+      console.error("Invalid delivery distance");
       throw new Error("Invalid delivery distance");
     }
 

@@ -15,17 +15,16 @@
 .modal-container {
   width: min(90%, 400px);
   height: auto;
-  border: 1px solid var(--primary);
   border-radius: 0.5rem;
   background-color: var(--primary-50);
   color: var(--text-dark);
   overflow: hidden;
-  box-shadow: 0 0px 32px rgba(204, 250, 255, 0.55);
+  box-shadow: 0 0px 32px rgba(204, 250, 255, 0.25);
   z-index: 10;
 }
 
 .modal-header {
-  background: linear-gradient(to right, var(--primary), var(--primary-600));
+  background: linear-gradient(to right, var(--primary-400), var(--primary-500));
   padding: 0.5rem 1rem;
 }
 

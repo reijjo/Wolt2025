@@ -3,4 +3,5 @@
   min-height: 100dvh;
   width: 100%;
   position: relative;
+  background: rgba(3, 30, 84, 0.5);
 }

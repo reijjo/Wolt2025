@@ -32,7 +32,7 @@ describe("Home", () => {
 
     const container = document.querySelector(".container");
     expect(container).toBeInTheDocument();
-    expect(container?.childElementCount).toBe(3);
+    expect(container?.childElementCount).toBe(2);
 
     expect(document.querySelector("h1")?.textContent).toBe(
       "Delivery Order Price Calculator",

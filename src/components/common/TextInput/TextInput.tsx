@@ -9,6 +9,7 @@ interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   dataTestId: string;
   width?: string;
   errors?: { [key: string]: string };
+  extraClass?: string;
 }
 
 export const TextInput = ({
@@ -18,12 +19,13 @@ export const TextInput = ({
   dataTestId,
   width = "100%",
   errors,
+  extraClass,
   ...props
 }: TextInputProps) => {
   const hasError = errors && errors[name];
 
   return (
-    <div className="text-input">
+    <div className={`text-input ${extraClass}`}>
       <label htmlFor={id}>{label}</label>
       <input
         type="text"

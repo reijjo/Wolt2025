@@ -1,6 +1,5 @@
 .btn {
   all: unset;
-  /* padding: 0 0.5rem; */
   padding-inline: 1rem;
   height: 2.5rem;
   border-radius: 2rem;
@@ -9,10 +8,10 @@
   border: 2px solid transparent;
 
   &:disabled {
-    background-color: lightgray;
-    border-color: gray;
-    color: gray;
-    pointer-events: none;
+    background-color: rgba(211, 211, 211, 0.5);
+    border-color: rgba(128, 128, 128, 0.5);
+    color: rgba(128, 128, 128, 0.5);
+    cursor: not-allowed;
   }
 
   &:focus {
@@ -24,36 +23,26 @@
   }
 }
 
+.btn:disabled:hover {
+  background-color: rgba(211, 211, 211, 0.5);
+  border-color: rgba(128, 128, 128, 0.5);
+  color: rgba(128, 128, 128, 0.5);
+  cursor: not-allowed;
+}
+
 .btn-filled {
-  /* background: linear-gradient(
-    to bottom,
-    var(--primary-400),
-    var(--primary-500)
-  ); */
-  background-color: var(--primary-500);
+  background-color: var(--primary-200);
   font-family: "Nunito", serif;
   font-weight: 700;
-  /* letter-spacing: 0.5px; */
   color: black;
+  border-color: var(--primary-400);
 
   &:hover {
-    /* background: linear-gradient(
-      to bottom,
-      var(--primary-600),
-      var(--primary-700)
-    ); */
-    background-color: var(--primary-600);
-    color: white;
+    background-color: var(--primary-300);
   }
 
   &:active {
-    /* background: linear-gradient(
-      to bottom,
-      var(--primary-700),
-      var(--primary-800)
-    ); */
-    background-color: var(--primary-700);
-    color: white;
+    background-color: var(--primary-400);
   }
 }
 
@@ -63,10 +52,23 @@
 
   &:hover {
     border: 2px solid var(--primary-600);
-    background-color: var(--primary-200);
+    /* font-weight: 500; */
+    background-color: var(--primary-100);
   }
 
   &:active {
     background-color: var(--primary-100);
   }
+}
+
+.btn-text {
+  all: unset;
+  /* font-family: "Nunito", serif;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid red;
+  padding: 0 0 0 0.5rem; */
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  border: 1px solid red;
 }

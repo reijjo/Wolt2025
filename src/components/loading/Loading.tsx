@@ -12,6 +12,6 @@ export const Loading = ({
 }: LoadingProps) => (
   <div className="loading" {...props}>
     <span className="loader"></span>
-    <p>{loadingText}</p>
+    <h2>{loadingText}</h2>
   </div>
 );

@@ -11,7 +11,9 @@ test.beforeEach(async ({ page }) => {
 
 test.describe("HOMEPAGE", () => {
   test("should display header and form", async ({ page }) => {
-    const header = page.locator("h1");
+    const header = page.getByRole("heading", {
+      name: /delivery order price calculator/i,
+    });
     const form = page.locator("form");
 
     await expect(header).toBeVisible();
@@ -57,9 +59,7 @@ test.describe("FORM FIELDS", () => {
     await calculate.click();
 
     const loading = page.getByText("Loading...");
-    const allGood = page.getByText(/thanks for the order/i);
     await expect(loading).toBeVisible();
-    await expect(allGood).toBeVisible();
 
     const rawValues = page.locator("[data-raw-value]");
     await expect(rawValues).toHaveCount(5);
@@ -81,6 +81,14 @@ test.describe("FORM FIELDS", () => {
     expect(await rawValues.nth(4).getAttribute("data-raw-value")).not.toBe(
       "13.90",
     );
+
+    const again = page.getByRole("button", { name: /order again/i });
+    await again.click();
+
+    const backToForm = page.getByRole("heading", {
+      name: /delivery order price calculator/i,
+    });
+    expect(backToForm).toBeVisible();
   });
 
   test("shows input errors", async ({ page }) => {

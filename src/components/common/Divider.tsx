@@ -12,7 +12,10 @@ export const Divider = ({
   return (
     <div
       className="divider"
-      style={{ borderTop: `${thickness}px solid ${color}`, width: `${width}%` }}
+      style={{
+        borderTop: `${thickness}px solid ${color}`,
+        width: `${width}%`,
+      }}
     ></div>
   );
 };

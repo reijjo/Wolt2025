@@ -2,14 +2,15 @@ import "./DetailsForm.css";
 
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
+import deliverypic from "../../assets/delivery.jpg";
 import { Button, Loading, Notification, TextInput } from "../../components";
-import { useModalContext } from "../../context";
+import { useModalContext, usePriceContext } from "../../context";
 import { useApi } from "../../hooks/useApi";
 import { useDetailsForm } from "../../hooks/useDetailsForm";
 import { useGetLocation } from "../../hooks/useGetLocation";
 import { usePriceCalculations } from "../../hooks/usePriceCalculations";
 import { useValidInputs } from "../../hooks/useValidInputs";
-import { DeliverySpecs } from "../../utils";
+import { DeliverySpecs, initialUserInputs } from "../../utils";
 
 export const DetailsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +35,12 @@ export const DetailsForm = () => {
   } = useGetLocation();
   const { handleApiErrors } = useApi();
   const { closeModal } = useModalContext();
+  const { setPriceData } = usePriceContext();
+  const isDisabled =
+    !userInputs.userLatitude ||
+    !userInputs.userLongitude ||
+    !userInputs.cartValue ||
+    !userInputs.venueSlug;
 
   useEffect(() => {
     if (useIp) {
@@ -75,15 +82,12 @@ export const DetailsForm = () => {
       }
 
       const { distance, specs } = infoResult ?? {};
-      const priceResult = getPrice(
-        userInputs,
-        distance,
-        specs as DeliverySpecs,
-      );
-      if (priceResult) {
-        showNotification("Thanks for the order!", "success", 5);
+      const price = getPrice(userInputs, distance, specs as DeliverySpecs);
+      if (price) {
+        setUserInputs(initialUserInputs);
       }
     } catch (error: unknown) {
+      setPriceData(null);
       showNotification(handleApiErrors(error), "error", 5);
     } finally {
       setIsLoading(false);
@@ -97,108 +101,123 @@ export const DetailsForm = () => {
       data-test-id="formDetails"
       aria-labelledby="form-title"
     >
-      {isLoading && <Loading aria-label="Loading..." role="status" />}
+      <picture className="form-image">
+        <img
+          src={deliverypic}
+          alt="Delivery Order Price Calculator"
+          title="Delivery Order Price Calculator"
+        />
+      </picture>
 
-      <h1 className="form-header" id="form-title">
-        Delivery Order Price Calculator
-      </h1>
+      <div className="form-fields">
+        {isLoading && <Loading aria-label="Loading..." role="status" />}
+        <h1 className="form-header column-span" id="form-title">
+          Delivery Order Price Calculator
+        </h1>
 
-      <TextInput
-        label="Venue slug"
-        name="venueSlug"
-        id="venueSlug"
-        dataTestId="venueSlug"
-        placeholder="Venue..."
-        value={userInputs.venueSlug.toString()}
-        onChange={handleInput}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        errors={errors}
-        aria-required="true"
-        aria-invalid={errors.venueSlug ? "true" : "false"}
-        aria-describedby={errors.venueSlug ? "venueSlug-error" : ""}
-      />
-      <TextInput
-        label="Cart value (EUR)"
-        name="cartValue"
-        id="cartValue"
-        dataTestId="cartValue"
-        placeholder="Value..."
-        value={userInputs.cartValue || ""}
-        onChange={handleInput}
-        onFocus={handleFocus}
-        errors={errors}
-        aria-required="true"
-        aria-invalid={errors.cartValue ? "true" : "false"}
-        aria-describedby={errors.cartValue ? "cartValue-error" : ""}
-      />
-      <TextInput
-        label="User latitude"
-        name="userLatitude"
-        id="userLatitude"
-        dataTestId="userLatitude"
-        placeholder="Latitude..."
-        value={userInputs.userLatitude || ""}
-        onChange={handleInput}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        errors={errors}
-        aria-required="true"
-        aria-invalid={errors.userLatitude ? "true" : "false"}
-        aria-describedby={errors.userLatitude ? "userLatitude-error" : ""}
-      />
-      <TextInput
-        label="User longitude"
-        name="userLongitude"
-        id="userLongitude"
-        dataTestId="userLongitude"
-        placeholder="Longitude..."
-        value={userInputs.userLongitude || ""}
-        onChange={handleInput}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        errors={errors}
-        aria-required="true"
-        aria-invalid={errors.userLongitude ? "true" : "false"}
-        aria-describedby={errors.userLongitude ? "userLongitude-error" : ""}
-      />
-      {notification && (
-        <Notification
-          message={notification.message}
-          type={notification.type}
-          role="alert"
-          aria-live="polite"
+        <TextInput
+          label="Venue"
+          name="venueSlug"
+          id="venueSlug"
+          dataTestId="venueSlug"
+          placeholder="Venue..."
+          value={userInputs.venueSlug.toString()}
+          onChange={handleInput}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          errors={errors}
+          aria-required="true"
+          aria-invalid={errors.venueSlug ? "true" : "false"}
+          aria-describedby={errors.venueSlug ? "venueSlug-error" : ""}
+          extraClass="column-span"
         />
-      )}
-      <div className="button-group" role="group" aria-label="Form actions">
-        <Button
-          className="btn btn-filled"
-          type="submit"
-          children="Get Location"
-          data-test-id="getLocation"
-          aria-label="Get current location"
-          tabIndex={0}
+        <TextInput
+          label="Cart value (EUR)"
+          name="cartValue"
+          id="cartValue"
+          dataTestId="cartValue"
+          placeholder="Value..."
+          value={userInputs.cartValue || ""}
+          onChange={handleInput}
+          onFocus={handleFocus}
+          errors={errors}
+          aria-required="true"
+          aria-invalid={errors.cartValue ? "true" : "false"}
+          aria-describedby={errors.cartValue ? "cartValue-error" : ""}
+          extraClass="column-span"
         />
-        <Button
-          className="btn btn-outlined"
-          type="button"
-          children="Calculate delivery price"
-          onClick={calculatePrice}
-          disabled={
-            !userInputs.userLatitude ||
-            !userInputs.userLongitude ||
-            !userInputs.cartValue ||
-            !userInputs.venueSlug
-          }
-          aria-label="Calculate delivery price"
-          aria-disabled={
-            !userInputs.userLatitude ||
-            !userInputs.userLongitude ||
-            !userInputs.cartValue ||
-            !userInputs.venueSlug
-          }
-          tabIndex={0}
-        />
+        <div className="location-inputs column-span">
+          <TextInput
+            label="User latitude"
+            name="userLatitude"
+            id="userLatitude"
+            dataTestId="userLatitude"
+            placeholder="Latitude..."
+            value={userInputs.userLatitude || ""}
+            onChange={handleInput}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            errors={errors}
+            aria-required="true"
+            aria-invalid={errors.userLatitude ? "true" : "false"}
+            aria-describedby={errors.userLatitude ? "userLatitude-error" : ""}
+          />
+          <TextInput
+            label="User longitude"
+            name="userLongitude"
+            id="userLongitude"
+            dataTestId="userLongitude"
+            placeholder="Longitude..."
+            value={userInputs.userLongitude || ""}
+            onChange={handleInput}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            errors={errors}
+            aria-required="true"
+            aria-invalid={errors.userLongitude ? "true" : "false"}
+            aria-describedby={errors.userLongitude ? "userLongitude-error" : ""}
+          />
+        </div>
+
+        {notification && (
+          <Notification
+            message={notification.message}
+            type={notification.type}
+            role="alert"
+            aria-live="polite"
+            extraClass="column-span"
+          />
+        )}
+        <div
+          className="button-group column-span"
+          role="group"
+          aria-label="Form actions"
+        >
+          <Button
+            className="btn btn-outlined"
+            type="submit"
+            children="Get Location"
+            data-test-id="getLocation"
+            aria-label="Get current location"
+            tabIndex={0}
+            title="Get Location"
+          />
+          <Button
+            className="btn btn-filled"
+            type="button"
+            children="Calculate delivery price"
+            onClick={calculatePrice}
+            disabled={isDisabled}
+            aria-label="Calculate delivery price"
+            aria-disabled={isDisabled}
+            tabIndex={0}
+            title={
+              isDisabled
+                ? "Please fill in all fields"
+                : "Calculate delivery price"
+            }
+          />
+        </div>
       </div>
     </form>
   );
