@@ -1,13 +1,19 @@
-import { SyntheticEvent, useState } from "react";
+import { Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
 
 import { fetchIpLocation } from "../api/api";
 import { Modal } from "../components";
 import { useModalContext } from "../context";
-import { UserInputs, initialUserInputs } from "../utils";
+import { UserInputs } from "../utils";
 
-export const useGetLocation = () => {
+// import { initialUserInputs } from "../utils";
+
+interface UseGetLocationProps {
+  setUserInputs: Dispatch<SetStateAction<UserInputs>>;
+}
+
+export const useGetLocation = ({ setUserInputs }: UseGetLocationProps) => {
   const [useIp, setUseIp] = useState(false);
-  const [userInputs, setUserInputs] = useState<UserInputs>(initialUserInputs);
+  // const [userInputs, setUserInputs] = useState<UserInputs>(initialUserInputs);
 
   const { closeModal, openModal } = useModalContext();
 
@@ -63,7 +69,7 @@ export const useGetLocation = () => {
     setUseIp,
     getBrowserLocation,
     getIpLocation,
-    userInputs,
-    setUserInputs,
+    // userInputs,
+    // setUserInputs,
   };
 };

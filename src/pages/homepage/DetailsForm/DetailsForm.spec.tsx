@@ -37,6 +37,46 @@ beforeEach(() => {
 });
 
 describe("DetailsForm", () => {
+  const setUserInputMock = vi.fn();
+
+  vi.mock("../../../hooks/useGetLocation", () => ({
+    useGetLocation: vi.fn(({ setUserInputs }) => {
+      setUserInputMock.mockImplementation(setUserInputs);
+
+      return {
+        getBrowserLocation: vi.fn(),
+        getIpLocation: vi.fn(),
+        useIp: false,
+      };
+    }),
+  }));
+
+  vi.mock(import("../../../hooks/useGetLocation"), async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      useGetLocation: vi.fn(() => ({
+        getBrowserLocation: vi.fn(),
+        getIpLocation: vi.fn(),
+        useIp: false,
+        setUseIp: vi.fn(),
+      })),
+    };
+  });
+
+  vi.mock(import("../../../context"), async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+      ...actual,
+      useModalContext: vi.fn(() => ({
+        openModal: vi.fn(),
+        closeModal: vi.fn(),
+        modalContent: null,
+        isModalOpen: false,
+      })),
+    };
+  });
+
   test("renders DetailsForm component", () => {
     const form = customTestId("formDetails");
     expect(form).toBeInTheDocument();

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { useGetLocation } from "./useGetLocation";
+import { UserInputs } from "../utils";
+// import { useGetLocation } from "./useGetLocation";
 import { useValidInputs } from "./useValidInputs";
 
 type NotificationType = "error" | "success";
@@ -9,12 +10,16 @@ interface Notification {
   type: NotificationType;
 }
 
-export const useDetailsForm = () => {
+interface UseDetailsFormProps {
+  userInputs: UserInputs;
+}
+
+export const useDetailsForm = ({ userInputs }: UseDetailsFormProps) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [notification, setNotification] = useState<Notification | null>(null);
 
   const { validateUserInputs } = useValidInputs();
-  const { userInputs } = useGetLocation();
+  // const { userInputs } = useGetLocation();
 
   const showNotification = (
     message: string,

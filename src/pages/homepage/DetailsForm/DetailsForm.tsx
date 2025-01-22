@@ -1,32 +1,21 @@
 import "./DetailsForm.css";
 
-import {
-  ChangeEvent,
-  Suspense,
-  SyntheticEvent,
-  lazy,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
 import deliverypic from "../../../assets/delivery2.webp";
-import { Button, Loading, TextInput } from "../../../components";
+import { Button, Loading, Notification, TextInput } from "../../../components";
 import { useModalContext, usePriceContext } from "../../../context";
 import { useApi } from "../../../hooks/useApi";
 import { useDetailsForm } from "../../../hooks/useDetailsForm";
 import { useGetLocation } from "../../../hooks/useGetLocation";
 import { usePriceCalculations } from "../../../hooks/usePriceCalculations";
 import { useValidInputs } from "../../../hooks/useValidInputs";
-import { DeliverySpecs, initialUserInputs } from "../../../utils";
-
-const Notification = lazy(() =>
-  import("../../../components").then((module) => ({
-    default: module.Notification,
-  })),
-);
+import { DeliverySpecs, UserInputs, initialUserInputs } from "../../../utils";
 
 export const DetailsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [userInputs, setUserInputs] = useState<UserInputs>(initialUserInputs);
+
   const {
     errors,
     setErrors,
@@ -36,16 +25,12 @@ export const DetailsForm = () => {
     handleFocus,
     handleBlur,
     invalidInput,
-  } = useDetailsForm();
+  } = useDetailsForm({ userInputs });
   const { validateUserInputs } = useValidInputs();
   const { getOrderInfo, getPrice } = usePriceCalculations();
-  const {
-    getBrowserLocation,
-    getIpLocation,
-    useIp,
-    userInputs,
+  const { getBrowserLocation, getIpLocation, useIp } = useGetLocation({
     setUserInputs,
-  } = useGetLocation();
+  });
   const { handleApiErrors } = useApi();
   const { closeModal } = useModalContext();
   const { setPriceData } = usePriceContext();
@@ -192,15 +177,13 @@ export const DetailsForm = () => {
         </div>
 
         {notification && (
-          <Suspense fallback={<Loading aria-label="Loading notification..." />}>
-            <Notification
-              message={notification.message}
-              type={notification.type}
-              role="alert"
-              aria-live="polite"
-              extraClass="column-span"
-            />
-          </Suspense>
+          <Notification
+            message={notification.message}
+            type={notification.type}
+            role="alert"
+            aria-live="polite"
+            extraClass="column-span"
+          />
         )}
         <div
           className="button-group column-span"

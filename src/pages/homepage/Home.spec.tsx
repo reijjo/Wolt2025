@@ -14,6 +14,14 @@ vi.mock("../../hooks/useApi", () => ({
   })),
 }));
 
+vi.mock("../../hooks/useGetLocation", () => ({
+  useGetLocation: vi.fn(() => ({
+    getBrowserLocation: vi.fn(),
+    getIpLocation: vi.fn(),
+    useIp: false,
+  })),
+}));
+
 beforeEach(() => {
   render(
     <ModalProvider>
@@ -24,7 +32,7 @@ beforeEach(() => {
   );
 });
 
-describe("Home", () => {
+describe.only("Home", () => {
   test("renders Home component", () => {
     const main = document.querySelector("main");
     expect(main).toBeInTheDocument();

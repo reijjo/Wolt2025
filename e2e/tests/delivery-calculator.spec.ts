@@ -88,7 +88,7 @@ test.describe("FORM FIELDS", () => {
     const backToForm = page.getByRole("heading", {
       name: /delivery order price calculator/i,
     });
-    expect(backToForm).toBeVisible();
+    await expect(backToForm).toBeVisible();
   });
 
   test("shows input errors", async ({ page }) => {
