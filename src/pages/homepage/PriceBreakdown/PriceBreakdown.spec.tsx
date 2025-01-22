@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { usePriceContext } from "../../context";
-import { customTestId } from "../../tests/utils";
-import { PriceData } from "../../utils";
+import { usePriceContext } from "../../../context";
+import { customTestId } from "../../../tests/utils";
+import { PriceData } from "../../../utils";
 import { PriceBreakdown } from "./PriceBreakdown";
 
 vi.mock("../../context", () => ({

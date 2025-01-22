@@ -1,16 +1,29 @@
 import "./DetailsForm.css";
 
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  Suspense,
+  SyntheticEvent,
+  lazy,
+  useEffect,
+  useState,
+} from "react";
 
-import deliverypic from "../../assets/delivery.jpg";
-import { Button, Loading, Notification, TextInput } from "../../components";
-import { useModalContext, usePriceContext } from "../../context";
-import { useApi } from "../../hooks/useApi";
-import { useDetailsForm } from "../../hooks/useDetailsForm";
-import { useGetLocation } from "../../hooks/useGetLocation";
-import { usePriceCalculations } from "../../hooks/usePriceCalculations";
-import { useValidInputs } from "../../hooks/useValidInputs";
-import { DeliverySpecs, initialUserInputs } from "../../utils";
+import deliverypic from "../../../assets/delivery2.jpg";
+import { Button, Loading, TextInput } from "../../../components";
+import { useModalContext, usePriceContext } from "../../../context";
+import { useApi } from "../../../hooks/useApi";
+import { useDetailsForm } from "../../../hooks/useDetailsForm";
+import { useGetLocation } from "../../../hooks/useGetLocation";
+import { usePriceCalculations } from "../../../hooks/usePriceCalculations";
+import { useValidInputs } from "../../../hooks/useValidInputs";
+import { DeliverySpecs, initialUserInputs } from "../../../utils";
+
+const Notification = lazy(() =>
+  import("../../../components").then((module) => ({
+    default: module.Notification,
+  })),
+);
 
 export const DetailsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +65,6 @@ export const DetailsForm = () => {
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setUserInputs((prev) => ({ ...prev, [name]: value }));
     invalidInput(name, value);
   };
@@ -97,7 +109,7 @@ export const DetailsForm = () => {
   return (
     <form
       className="form-details"
-      onSubmit={getBrowserLocation}
+      onSubmit={calculatePrice}
       data-test-id="formDetails"
       aria-labelledby="form-title"
     >
@@ -106,15 +118,17 @@ export const DetailsForm = () => {
           src={deliverypic}
           alt="Delivery Order Price Calculator"
           title="Delivery Order Price Calculator"
+          width="100%"
+          height="100%"
         />
       </picture>
 
       <div className="form-fields">
         {isLoading && <Loading aria-label="Loading..." role="status" />}
+
         <h1 className="form-header column-span" id="form-title">
           Delivery Order Price Calculator
         </h1>
-
         <TextInput
           label="Venue"
           name="venueSlug"
@@ -180,13 +194,15 @@ export const DetailsForm = () => {
         </div>
 
         {notification && (
-          <Notification
-            message={notification.message}
-            type={notification.type}
-            role="alert"
-            aria-live="polite"
-            extraClass="column-span"
-          />
+          <Suspense fallback={<Loading aria-label="Loading notification..." />}>
+            <Notification
+              message={notification.message}
+              type={notification.type}
+              role="alert"
+              aria-live="polite"
+              extraClass="column-span"
+            />
+          </Suspense>
         )}
         <div
           className="button-group column-span"
@@ -195,7 +211,8 @@ export const DetailsForm = () => {
         >
           <Button
             className="btn btn-outlined"
-            type="submit"
+            type="button"
+            onClick={getBrowserLocation}
             children="Get Location"
             data-test-id="getLocation"
             aria-label="Get current location"
@@ -204,9 +221,8 @@ export const DetailsForm = () => {
           />
           <Button
             className="btn btn-filled"
-            type="button"
+            type="submit"
             children="Calculate delivery price"
-            onClick={calculatePrice}
             disabled={isDisabled}
             aria-label="Calculate delivery price"
             aria-disabled={isDisabled}

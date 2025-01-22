@@ -1,8 +1,8 @@
 import "./Home.css";
 
 import { usePriceContext } from "../../context";
-import { DetailsForm } from "./DetailsForm";
-import { PriceBreakdown } from "./PriceBreakdown";
+import { DetailsForm } from "./DetailsForm/DetailsForm";
+import { PriceBreakdown } from "./PriceBreakdown/PriceBreakdown";
 
 export const Home = () => {
   const { priceData } = usePriceContext();

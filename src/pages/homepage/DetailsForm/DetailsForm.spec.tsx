@@ -2,13 +2,20 @@ import { act, render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { ModalProvider, PriceProvider, usePriceContext } from "../../context";
-import { useApi } from "../../hooks/useApi";
-import { usePriceCalculations } from "../../hooks/usePriceCalculations";
-import { useValidInputs } from "../../hooks/useValidInputs";
-import { fetchSpecsMock, fetchVenueLocationMock } from "../../tests/mockData";
-import { customTestId, exampleInputs } from "../../tests/utils";
-import { PriceData, inputErrors } from "../../utils";
+import {
+  ModalProvider,
+  PriceProvider,
+  usePriceContext,
+} from "../../../context";
+import { useApi } from "../../../hooks/useApi";
+import { usePriceCalculations } from "../../../hooks/usePriceCalculations";
+import { useValidInputs } from "../../../hooks/useValidInputs";
+import {
+  fetchSpecsMock,
+  fetchVenueLocationMock,
+} from "../../../tests/mockData";
+import { customTestId, exampleInputs } from "../../../tests/utils";
+import { PriceData, inputErrors } from "../../../utils";
 import { DetailsForm } from "./DetailsForm";
 
 const mockData: PriceData = {
@@ -127,7 +134,7 @@ describe("DetailsForm", () => {
 describe("DetailsForm Calculations & APIs", () => {
   const { validateUserInputs } = useValidInputs();
 
-  vi.mock(import("../../context"), async (importOriginal) => {
+  vi.mock(import("../../../context"), async (importOriginal) => {
     const actual = await importOriginal();
     return {
       ...actual,

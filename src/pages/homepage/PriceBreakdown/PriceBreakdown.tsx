@@ -1,10 +1,10 @@
 import "./PriceBreakdown.css";
 
-import pricepic from "../../assets/paperbag.jpeg";
-import { Button } from "../../components";
-import { usePriceContext } from "../../context";
-import { useValidInputs } from "../../hooks/useValidInputs";
-import { formatValue, initialPriceData, parseName } from "../../utils";
+import pricepic from "../../../assets/paperbag.jpeg";
+import { Button } from "../../../components";
+import { usePriceContext } from "../../../context";
+import { useValidInputs } from "../../../hooks/useValidInputs";
+import { formatValue, initialPriceData, parseName } from "../../../utils";
 
 export const PriceBreakdown = () => {
   const { priceData, setPriceData } = usePriceContext();
