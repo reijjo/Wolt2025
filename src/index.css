@@ -76,6 +76,11 @@ body {
   --ok-xxlight: hsl(143, 42%, 94%);
 }
 
+:is(:not(input)):focus {
+  outline: 2px solid #007bff; /* Blue outline */
+  outline-offset: 2px; /* Creates space between element and outline */
+}
+
 /* Headers */
 :is(h1, h2, h3, h4) {
   font-family: "Nunito", serif;
@@ -86,10 +91,10 @@ body {
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
-:is(h5, h6) {
+:is(h2, h5, h6) {
   font-family: "Nunito", serif;
   font-optical-sizing: auto;
   font-weight: 600;

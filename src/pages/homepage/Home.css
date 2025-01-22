@@ -1,6 +1,7 @@
 .wrapper {
   /* 12 grids */
   width: min(100%, 1366px);
+  min-height: 100dvh;
   height: 100%;
   margin: 0 auto;
   padding: 12px 24px 3rem;
@@ -21,21 +22,6 @@
     font-size: 0.925rem;
     font-size: 0.85rem;
   }
-}
-
-.main-header {
-  background: linear-gradient(
-    to right,
-    var(--primary-100),
-    var(--text-light),
-    var(--primary-100)
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  text-wrap: balance;
-  text-align: center;
 }
 
 .container {

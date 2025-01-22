@@ -6,8 +6,7 @@ import { PriceBreakdown } from "./PriceBreakdown";
 
 export const Home = () => {
   return (
-    <main className="wrapper">
-      <h1 className="main-header">Delivery Order Price Calculator</h1>
+    <main className="wrapper" role="main">
       <div className="container">
         <DetailsForm />
         <Divider />

@@ -95,8 +95,14 @@ export const DetailsForm = () => {
       className="form-details"
       onSubmit={getBrowserLocation}
       data-test-id="formDetails"
+      aria-labelledby="form-title"
     >
-      {isLoading && <Loading />}
+      {isLoading && <Loading aria-label="Loading..." role="status" />}
+
+      <h1 className="form-header" id="form-title">
+        Delivery Order Price Calculator
+      </h1>
+
       <TextInput
         label="Venue slug"
         name="venueSlug"
@@ -108,6 +114,9 @@ export const DetailsForm = () => {
         onFocus={handleFocus}
         onBlur={handleBlur}
         errors={errors}
+        aria-required="true"
+        aria-invalid={errors.venueSlug ? "true" : "false"}
+        aria-describedby={errors.venueSlug ? "venueSlug-error" : ""}
       />
       <TextInput
         label="Cart value (EUR)"
@@ -119,6 +128,9 @@ export const DetailsForm = () => {
         onChange={handleInput}
         onFocus={handleFocus}
         errors={errors}
+        aria-required="true"
+        aria-invalid={errors.cartValue ? "true" : "false"}
+        aria-describedby={errors.cartValue ? "cartValue-error" : ""}
       />
       <TextInput
         label="User latitude"
@@ -131,6 +143,9 @@ export const DetailsForm = () => {
         onFocus={handleFocus}
         onBlur={handleBlur}
         errors={errors}
+        aria-required="true"
+        aria-invalid={errors.userLatitude ? "true" : "false"}
+        aria-describedby={errors.userLatitude ? "userLatitude-error" : ""}
       />
       <TextInput
         label="User longitude"
@@ -143,16 +158,26 @@ export const DetailsForm = () => {
         onFocus={handleFocus}
         onBlur={handleBlur}
         errors={errors}
+        aria-required="true"
+        aria-invalid={errors.userLongitude ? "true" : "false"}
+        aria-describedby={errors.userLongitude ? "userLongitude-error" : ""}
       />
       {notification && (
-        <Notification message={notification.message} type={notification.type} />
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          role="alert"
+          aria-live="polite"
+        />
       )}
-      <div className="button-group">
+      <div className="button-group" role="group" aria-label="Form actions">
         <Button
           className="btn btn-filled"
           type="submit"
           children="Get Location"
           data-test-id="getLocation"
+          aria-label="Get current location"
+          tabIndex={0}
         />
         <Button
           className="btn btn-outlined"
@@ -165,6 +190,14 @@ export const DetailsForm = () => {
             !userInputs.cartValue ||
             !userInputs.venueSlug
           }
+          aria-label="Calculate delivery price"
+          aria-disabled={
+            !userInputs.userLatitude ||
+            !userInputs.userLongitude ||
+            !userInputs.cartValue ||
+            !userInputs.venueSlug
+          }
+          tabIndex={0}
         />
       </div>
     </form>

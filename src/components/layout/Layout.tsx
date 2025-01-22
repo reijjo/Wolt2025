@@ -1,3 +1,5 @@
+import "./Layout.css";
+
 import { Outlet } from "react-router-dom";
 
 import { ModalProvider } from "../../context/modal";

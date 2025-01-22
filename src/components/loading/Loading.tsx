@@ -1,11 +1,16 @@
 import "./Loading.css";
 
-type LoadingProps = {
-  loadingText?: string;
-};
+import { HTMLAttributes } from "react";
 
-export const Loading = ({ loadingText = "Loading..." }: LoadingProps) => (
-  <div className="loading">
+interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
+  loadingText?: string;
+}
+
+export const Loading = ({
+  loadingText = "Loading...",
+  ...props
+}: LoadingProps) => (
+  <div className="loading" {...props}>
     <span className="loader"></span>
     <p>{loadingText}</p>
   </div>

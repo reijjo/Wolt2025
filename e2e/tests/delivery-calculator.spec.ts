@@ -33,7 +33,7 @@ test.describe("HOMEPAGE", () => {
   });
 
   test("finds price breakdown and raw-data null values", async ({ page }) => {
-    const header = page.locator("h5");
+    const header = page.locator("h2");
     const rawValues = page.locator("[data-raw-value]");
 
     await expect(header).toHaveText("Price breakdown");

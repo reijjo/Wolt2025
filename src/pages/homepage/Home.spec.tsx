@@ -28,7 +28,7 @@ describe("Home", () => {
   test("renders Home component", () => {
     const main = document.querySelector("main");
     expect(main).toBeInTheDocument();
-    expect(main?.childElementCount).toBe(2);
+    expect(main?.childElementCount).toBe(1);
 
     const container = document.querySelector(".container");
     expect(container).toBeInTheDocument();

@@ -7,6 +7,21 @@
   position: relative;
 }
 
+.form-header {
+  background: linear-gradient(
+    to right,
+    var(--primary-100),
+    var(--text-dark),
+    var(--primary-100)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-wrap: balance;
+  text-align: center;
+}
+
 .button-group {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

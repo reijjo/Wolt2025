@@ -35,7 +35,7 @@ export const TextInput = ({
         style={{ width: width }}
       />
       {errors && errors[name] && (
-        <ul className="text-input-error">
+        <ul className="text-input-error" role="alert">
           <li>{errors[name]}</li>
         </ul>
       )}
