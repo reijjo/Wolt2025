@@ -1,39 +1,39 @@
+import React from "react";
+
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { ModalProvider, PriceProvider } from "../../context";
-import { fetchSpecsMock, fetchVenueLocationMock } from "../../tests/mockData";
+import { ModalProvider, PriceProvider, usePriceContext } from "../../context";
 import { customTestId, findRawValue } from "../../tests/utils";
+import { PriceData } from "../../utils";
 import { Home } from "./Home";
 
-vi.mock("../../hooks/useApi", () => ({
-  useApi: vi.fn(() => ({
-    fetchSpecs: vi.fn().mockResolvedValue(fetchSpecsMock),
-    fetchVenueLocation: vi.fn().mockResolvedValue(fetchVenueLocationMock),
-    handleApiErrors: vi.fn(),
-  })),
-}));
-
-vi.mock("../../hooks/useGetLocation", () => ({
-  useGetLocation: vi.fn(() => ({
-    getBrowserLocation: vi.fn(),
-    getIpLocation: vi.fn(),
-    useIp: false,
-  })),
-}));
-
 beforeEach(() => {
-  render(
-    <ModalProvider>
-      <PriceProvider>
-        <Home />
-      </PriceProvider>
-    </ModalProvider>,
-  );
+  vi.clearAllMocks();
+
+  // render(
+  //   <ModalProvider>
+  //     <PriceProvider>
+  //       <Home />
+  //     </PriceProvider>
+  //   </ModalProvider>,
+  // );
 });
 
-describe.only("Home", () => {
+describe("Home", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   test("renders Home component", () => {
+    render(
+      <ModalProvider>
+        <PriceProvider>
+          <Home />
+        </PriceProvider>
+      </ModalProvider>,
+    );
+
     const main = document.querySelector("main");
     expect(main).toBeInTheDocument();
     expect(main?.childElementCount).toBe(1);
@@ -51,6 +51,14 @@ describe.only("Home", () => {
   });
 
   test("raw-data to be null", async () => {
+    render(
+      <ModalProvider>
+        <PriceProvider>
+          <Home />
+        </PriceProvider>
+      </ModalProvider>,
+    );
+
     const venue = customTestId("venueSlug");
     const value = customTestId("cartValue");
     const latitude = customTestId("userLatitude");
@@ -66,5 +74,55 @@ describe.only("Home", () => {
     expect(findRawValue("Delivery fee")).toBe(null);
     expect(findRawValue("Small order surcharge")).toBe(null);
     expect(findRawValue("Total price")).toBe(null);
+  });
+
+  test("renders DetailsForm component", () => {
+    vi.clearAllMocks();
+
+    vi.spyOn(React, "useContext").mockReturnValue({
+      priceData: null,
+      setPriceData: vi.fn(),
+    });
+
+    render(
+      <ModalProvider>
+        <PriceProvider>
+          <Home />
+        </PriceProvider>
+      </ModalProvider>,
+    );
+
+    expect(screen.getByText("Delivery Order Price Calculator")).toBeVisible();
+    expect(screen.queryByText("Price breakdown")).not.toBeVisible();
+  });
+
+  test.skip("renders PriceBreakdown component", async () => {
+    const mockData: PriceData = {
+      cartValue: 1000,
+      smallOrderSurcharge: 0,
+      deliveryFee: 190,
+      deliveryDistance: 177,
+      totalPrice: 1190,
+    };
+
+    vi.clearAllMocks();
+
+    vi.mocked(usePriceContext).mockReturnValue({
+      priceData: mockData,
+      setPriceData: vi.fn(),
+    });
+
+    render(
+      <ModalProvider>
+        <PriceProvider>
+          <Home />
+        </PriceProvider>
+      </ModalProvider>,
+    );
+
+    expect(
+      screen.queryByText("Delivery Order Price Calculator"),
+    ).not.toBeVisible();
+    expect(screen.getByText("Price breakdown")).toBeVisible();
   });
 });

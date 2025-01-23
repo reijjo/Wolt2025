@@ -18,6 +18,7 @@ export default defineConfig({
         "**/dist/**",
         "eslint.config.js",
         "vite.config.ts",
+        "src/main.tsx",
       ],
     },
   },

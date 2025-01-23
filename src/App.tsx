@@ -9,7 +9,7 @@ import { Layout } from "./components";
 import { PriceProvider } from "./context";
 import { Home } from "./pages/homepage/Home";
 
-function App() {
+export const App = () => {
   return (
     <PriceProvider>
       <Router>
@@ -22,6 +22,4 @@ function App() {
       </Router>
     </PriceProvider>
   );
-}
-
-export default App;
+};
