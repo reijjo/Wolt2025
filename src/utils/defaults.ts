@@ -18,7 +18,7 @@ export const inputErrors = {
   venueInvalid: `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`,
   cartComma: "Change ',' to '.'",
   cartEmpty: "Cart value is required",
-  cartInvalid: "Cart minimum value is 0.01",
+  cartInvalid: "Cart value must be a number",
   cartRequired: "Cart minimum value is 0.01",
   cartError: "Invalid cart value",
   latitudeNotNumber: "Latitude must be a number",
