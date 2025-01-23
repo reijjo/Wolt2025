@@ -16,7 +16,7 @@ export default defineConfig({
         "e2e/**/*",
         "**/node_modules/**/*",
         "**/dist/**",
-        "esling.config.js",
+        "eslint.config.js",
         "vite.config.ts",
       ],
     },

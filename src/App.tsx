@@ -7,7 +7,7 @@ import {
 
 import { Layout } from "./components";
 import { PriceProvider } from "./context";
-import { Home } from "./pages";
+import { Home } from "./pages/homepage/Home";
 
 function App() {
   return (
