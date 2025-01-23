@@ -69,7 +69,5 @@ export const useGetLocation = ({ setUserInputs }: UseGetLocationProps) => {
     setUseIp,
     getBrowserLocation,
     getIpLocation,
-    // userInputs,
-    // setUserInputs,
   };
 };

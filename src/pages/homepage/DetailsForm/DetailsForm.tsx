@@ -3,15 +3,14 @@ import "./DetailsForm.css";
 import { ChangeEvent, useEffect, useState } from "react";
 
 import deliverypic from "../../../assets/delivery2.webp";
-import pin from "../../../assets/pin.png";
-import { Button, IconButton, Loading, Notification } from "../../../components";
+import { Loading, Notification } from "../../../components";
 import { useModalContext } from "../../../context";
 import { useApi } from "../../../hooks/useApi";
 import { useDetailsForm } from "../../../hooks/useDetailsForm";
 import { useGetLocation } from "../../../hooks/useGetLocation";
 import { useGetPrice } from "../../../hooks/useGetPrice";
-import { useScreenWidth } from "../../../hooks/useScreenWidth";
 import { UserInputs, initialUserInputs } from "../../../utils";
+import { FormButtons } from "./FormButtons";
 import { FormInputs } from "./FormInputs";
 
 export const DetailsForm = () => {
@@ -41,13 +40,6 @@ export const DetailsForm = () => {
     userInputs,
     setUserInputs,
   });
-  const isMobile = useScreenWidth();
-
-  const isDisabled =
-    !userInputs.userLatitude ||
-    !userInputs.userLongitude ||
-    !userInputs.cartValue ||
-    !userInputs.venueSlug;
 
   useEffect(() => {
     if (useIp) {
@@ -92,7 +84,6 @@ export const DetailsForm = () => {
           handleBlur={handleBlur}
           errors={errors}
         />
-
         {notification && (
           <Notification
             message={notification.message}
@@ -102,50 +93,10 @@ export const DetailsForm = () => {
             extraClass="column-span"
           />
         )}
-
-        <div
-          className="button-group column-span"
-          role="group"
-          aria-label="Form actions"
-        >
-          {isMobile ? (
-            <IconButton
-              className="btn-icon"
-              type="button"
-              onClick={getBrowserLocation}
-              icon={pin}
-              title="Get Location"
-              data-test-id="getLocation"
-              aria-label="Get current location"
-              tabIndex={0}
-            />
-          ) : (
-            <Button
-              className="btn btn-outlined"
-              type="button"
-              onClick={getBrowserLocation}
-              children="Get Location"
-              data-test-id="getLocation"
-              aria-label="Get current location"
-              tabIndex={0}
-              title="Get Location"
-            />
-          )}
-          <Button
-            className="btn btn-filled"
-            type="submit"
-            children="Calculate delivery price"
-            disabled={isDisabled}
-            aria-label="Calculate delivery price"
-            aria-disabled={isDisabled}
-            tabIndex={0}
-            title={
-              isDisabled
-                ? "Please fill in all fields"
-                : "Calculate delivery price"
-            }
-          />
-        </div>
+        <FormButtons
+          userInputs={userInputs}
+          getBrowserLocation={getBrowserLocation}
+        />
       </div>
     </form>
   );
