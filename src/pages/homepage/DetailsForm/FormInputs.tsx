@@ -1,14 +1,21 @@
 import { TextInput } from "../../../components";
-import { useDetailsForm } from "../../../hooks/useDetailsForm";
 import { UserInputs } from "../../../utils";
 
 interface FormInputsProps {
   userInputs: UserInputs;
   handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFocus: (e: React.FocusEvent<HTMLInputElement>) => void;
+  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  errors: { [key: string]: string };
 }
 
-export const FormInputs = ({ userInputs, handleInput }: FormInputsProps) => {
-  const { errors, handleFocus, handleBlur } = useDetailsForm();
+export const FormInputs = ({
+  userInputs,
+  handleInput,
+  handleFocus,
+  handleBlur,
+  errors,
+}: FormInputsProps) => {
   return (
     <>
       <TextInput

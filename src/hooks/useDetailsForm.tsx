@@ -4,7 +4,7 @@ import { UserInputs } from "../utils";
 // import { useGetLocation } from "./useGetLocation";
 import { useValidInputs } from "./useValidInputs";
 
-type NotificationType = "error" | "success";
+export type NotificationType = "error" | "success";
 interface Notification {
   message: string;
   type: NotificationType;

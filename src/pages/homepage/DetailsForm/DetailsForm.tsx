@@ -1,16 +1,16 @@
 import "./DetailsForm.css";
 
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import deliverypic from "../../../assets/delivery2.webp";
-import { Button, Loading, Notification, TextInput } from "../../../components";
-import { useModalContext, usePriceContext } from "../../../context";
+import { Button, Loading, Notification } from "../../../components";
+import { useModalContext } from "../../../context";
 import { useApi } from "../../../hooks/useApi";
 import { useDetailsForm } from "../../../hooks/useDetailsForm";
 import { useGetLocation } from "../../../hooks/useGetLocation";
-import { usePriceCalculations } from "../../../hooks/usePriceCalculations";
-import { useValidInputs } from "../../../hooks/useValidInputs";
-import { DeliverySpecs, UserInputs, initialUserInputs } from "../../../utils";
+import { useGetPrice } from "../../../hooks/useGetPrice";
+import { UserInputs, initialUserInputs } from "../../../utils";
+import { FormInputs } from "./FormInputs";
 
 export const DetailsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,14 +26,20 @@ export const DetailsForm = () => {
     handleBlur,
     invalidInput,
   } = useDetailsForm({ userInputs });
-  const { validateUserInputs } = useValidInputs();
-  const { getOrderInfo, getPrice } = usePriceCalculations();
   const { getBrowserLocation, getIpLocation, useIp } = useGetLocation({
     setUserInputs,
   });
   const { handleApiErrors } = useApi();
   const { closeModal } = useModalContext();
-  const { setPriceData } = usePriceContext();
+  const { calculatePrice } = useGetPrice({
+    setIsLoading,
+    setErrors,
+    showNotification,
+    clearNotification,
+    userInputs,
+    setUserInputs,
+  });
+
   const isDisabled =
     !userInputs.userLatitude ||
     !userInputs.userLongitude ||
@@ -52,43 +58,6 @@ export const DetailsForm = () => {
     const { name, value } = e.target;
     setUserInputs((prev) => ({ ...prev, [name]: value }));
     invalidInput(name, value);
-  };
-
-  const calculatePrice = async (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    const validation = validateUserInputs(userInputs);
-    if (!validation.isValid) {
-      setErrors(validation.errors);
-      showNotification(`Please check your inputs`, "error", 5);
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      clearNotification();
-
-      const validationResult = validateUserInputs(userInputs);
-      if (!validationResult.isValid) {
-        throw new Error(JSON.stringify(validationResult.errors));
-      }
-
-      const infoResult = await getOrderInfo(userInputs);
-      if (!infoResult) {
-        throw new Error("Failed to get order information");
-      }
-
-      const { distance, specs } = infoResult ?? {};
-      const price = getPrice(userInputs, distance, specs as DeliverySpecs);
-      if (price) {
-        setUserInputs(initialUserInputs);
-      }
-    } catch (error: unknown) {
-      setPriceData(null);
-      showNotification(handleApiErrors(error), "error", 5);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
@@ -112,69 +81,14 @@ export const DetailsForm = () => {
         <h1 className="form-header column-span" id="form-title">
           Delivery Order Price Calculator
         </h1>
-        <TextInput
-          label="Venue"
-          name="venueSlug"
-          id="venueSlug"
-          dataTestId="venueSlug"
-          placeholder="Venue..."
-          value={userInputs.venueSlug.toString()}
-          onChange={handleInput}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+
+        <FormInputs
+          userInputs={userInputs}
+          handleInput={handleInput}
+          handleFocus={handleFocus}
+          handleBlur={handleBlur}
           errors={errors}
-          aria-required="true"
-          aria-invalid={errors.venueSlug ? "true" : "false"}
-          aria-describedby={errors.venueSlug ? "venueSlug-error" : ""}
-          extraClass="column-span"
         />
-        <TextInput
-          label="Cart value (EUR)"
-          name="cartValue"
-          id="cartValue"
-          dataTestId="cartValue"
-          placeholder="Value..."
-          value={userInputs.cartValue || ""}
-          onChange={handleInput}
-          onFocus={handleFocus}
-          errors={errors}
-          aria-required="true"
-          aria-invalid={errors.cartValue ? "true" : "false"}
-          aria-describedby={errors.cartValue ? "cartValue-error" : ""}
-          extraClass="column-span"
-        />
-        <div className="location-inputs column-span">
-          <TextInput
-            label="User latitude"
-            name="userLatitude"
-            id="userLatitude"
-            dataTestId="userLatitude"
-            placeholder="Latitude..."
-            value={userInputs.userLatitude || ""}
-            onChange={handleInput}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            errors={errors}
-            aria-required="true"
-            aria-invalid={errors.userLatitude ? "true" : "false"}
-            aria-describedby={errors.userLatitude ? "userLatitude-error" : ""}
-          />
-          <TextInput
-            label="User longitude"
-            name="userLongitude"
-            id="userLongitude"
-            dataTestId="userLongitude"
-            placeholder="Longitude..."
-            value={userInputs.userLongitude || ""}
-            onChange={handleInput}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            errors={errors}
-            aria-required="true"
-            aria-invalid={errors.userLongitude ? "true" : "false"}
-            aria-describedby={errors.userLongitude ? "userLongitude-error" : ""}
-          />
-        </div>
 
         {notification && (
           <Notification
@@ -185,6 +99,7 @@ export const DetailsForm = () => {
             extraClass="column-span"
           />
         )}
+
         <div
           className="button-group column-span"
           role="group"
