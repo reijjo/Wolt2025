@@ -49,6 +49,20 @@ Run `npm run test` in the root of the folder
 - Run `npm run test:e2e` in the root of the folder
 - Or run tests via graphical UI `npm run test:ui` (wait for the window to open and press green Play button on the top left)
 
+## Tech stuff
+
+### With what?
+
+Done with `React`, `TypeScript` and basic `CSS`
+
+- `useContext` for state management
+- `geolib` package for geological business
+
+### Testing
+
+- `Vitest` for unit tests
+- `Playwright` for End-to-End tests
+
 ## The task itself
 
 <details>
