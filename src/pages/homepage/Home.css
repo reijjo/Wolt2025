@@ -15,10 +15,8 @@
     padding: 1.5rem 1rem;
   }
 
-  @media only screen and (max-width: 481px) {
-    padding: 8px 8px 4rem;
+  @media only screen and (max-width: 581px) {
     font-size: 0.925rem;
-    font-size: 0.85rem;
   }
 }
 

@@ -33,7 +33,7 @@
 .btn-filled {
   background-color: var(--primary-200);
   font-family: "Nunito", serif;
-  font-weight: 700;
+  font-weight: 600;
   color: black;
   border-color: var(--primary-400);
 
@@ -43,6 +43,10 @@
 
   &:active {
     background-color: var(--primary-400);
+  }
+
+  @media screen and (max-width: 581px) {
+    font-size: 0.75rem;
   }
 }
 
@@ -62,14 +66,20 @@
 
 .btn-icon {
   all: unset;
-  /* border-radius: 50%; */
+  border-radius: 50%;
   height: 2.5rem;
+  aspect-ratio: 1/1;
   background-color: transparent;
   border: 2px solid var(--primary);
   cursor: pointer;
 
   display: grid;
   place-items: center;
+
+  & img {
+    height: 24px;
+    aspect-ratio: 1/1;
+  }
 
   &:hover {
     border: 2px solid var(--primary-600);

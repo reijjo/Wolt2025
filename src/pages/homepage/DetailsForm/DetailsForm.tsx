@@ -3,12 +3,14 @@ import "./DetailsForm.css";
 import { ChangeEvent, useEffect, useState } from "react";
 
 import deliverypic from "../../../assets/delivery2.webp";
-import { Button, Loading, Notification } from "../../../components";
+import pin from "../../../assets/pin.png";
+import { Button, IconButton, Loading, Notification } from "../../../components";
 import { useModalContext } from "../../../context";
 import { useApi } from "../../../hooks/useApi";
 import { useDetailsForm } from "../../../hooks/useDetailsForm";
 import { useGetLocation } from "../../../hooks/useGetLocation";
 import { useGetPrice } from "../../../hooks/useGetPrice";
+import { useScreenWidth } from "../../../hooks/useScreenWidth";
 import { UserInputs, initialUserInputs } from "../../../utils";
 import { FormInputs } from "./FormInputs";
 
@@ -39,6 +41,7 @@ export const DetailsForm = () => {
     userInputs,
     setUserInputs,
   });
+  const isMobile = useScreenWidth();
 
   const isDisabled =
     !userInputs.userLatitude ||
@@ -105,16 +108,29 @@ export const DetailsForm = () => {
           role="group"
           aria-label="Form actions"
         >
-          <Button
-            className="btn btn-outlined"
-            type="button"
-            onClick={getBrowserLocation}
-            children="Get Location"
-            data-test-id="getLocation"
-            aria-label="Get current location"
-            tabIndex={0}
-            title="Get Location"
-          />
+          {isMobile ? (
+            <IconButton
+              className="btn-icon"
+              type="button"
+              onClick={getBrowserLocation}
+              icon={pin}
+              title="Get Location"
+              data-test-id="getLocation"
+              aria-label="Get current location"
+              tabIndex={0}
+            />
+          ) : (
+            <Button
+              className="btn btn-outlined"
+              type="button"
+              onClick={getBrowserLocation}
+              children="Get Location"
+              data-test-id="getLocation"
+              aria-label="Get current location"
+              tabIndex={0}
+              title="Get Location"
+            />
+          )}
           <Button
             className="btn btn-filled"
             type="submit"
