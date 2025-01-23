@@ -27,7 +27,9 @@ export const PriceBreakdown = () => {
       </picture>
 
       <div className="breakdown-container">
-        <h1 id="thank-you">Thanks for your order!</h1>
+        <h1 id="thank-you" className="price-header">
+          Thanks for your order!
+        </h1>
         <div
           className="breakdown-details"
           aria-labelledby="breakdown-title"
@@ -57,7 +59,7 @@ export const PriceBreakdown = () => {
         <Button
           className="btn btn-filled"
           type="button"
-          children="Order again"
+          children="Order again!"
           onClick={handleOrderAgain}
         />
       </div>
