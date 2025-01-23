@@ -6,13 +6,37 @@
 - DOPC is an imaginary frontend which is capable of calculating the total price and price breakdown of a delivery order.
 - DOPC integrates with the Home Assignment API to fetch venue related data required to calculate the prices.
 
+## How to install
+
+### Install with a script
+
+- Go to the `Wolt2025` folder after the file unzip
+- Run `sh install.sh`
+- If that doens't work do the steps in the manual installation
+
+### Manual installation
+
+- Go to the `Wolt2025` folder after the file unzip
+- Run `npm install` in terminal
+
 ## Running the application
+
+- Run `npm run dev` in terminal
+- Go `http://localhost:5173` with your browser and there it is
 
 ## Testing the application
 
+### Installation
+
+If you used the install script you don't need to do any more installs
+
+- Otherwise, go to the `Wolt2025/e2e` folder and run `npm install`
+
 ### Unit tests
 
-- Run `npm run test` in the root of the folder
+Run `npm run test` in the root of the folder
+
+- If you want to see the test coverage run `npm run test:coverage`
 
 ### End to End tests
 
