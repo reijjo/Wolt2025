@@ -6,13 +6,10 @@
 - DOPC is an imaginary frontend which is capable of calculating the total price and price breakdown of a delivery order.
 - DOPC integrates with the Home Assignment API to fetch venue related data required to calculate the prices.
 <img width="640" alt="Desktop" src="https://github.com/user-attachments/assets/6775cca7-6613-4e3b-9b92-7eed68148aef" />
-- <details>
-  <summary>Mobile view</summary>
-  <img width="240" alt="Phone" src="https://github.com/user-attachments/assets/debb84cd-fcf9-4417-a625-d49c1af22585" />
-</details>
-
-
-
+<details>
+    <summary>Mobile view</summary>
+    <img width="240" alt="Phone" src="https://github.com/user-attachments/assets/debb84cd-fcf9-4417-a625-d49c1af22585" />
+  </details>
 
 ## How to install
 
