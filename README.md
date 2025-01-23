@@ -63,6 +63,16 @@ Done with `React`, `TypeScript` and basic `CSS`
 - `Vitest` for unit tests
 - `Playwright` for End-to-End tests
 
+### API
+
+Wolt Home Assingment API
+
+- for necessary information
+
+IP Geolocation API (https://ip-api.com)
+
+- for user location if browser location is disabled
+
 ## The task itself
 
 <details>
