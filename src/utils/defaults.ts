@@ -13,6 +13,14 @@ export const initialPriceData = {
   totalPrice: null,
 };
 
+export const filledPriceData = {
+  cartValue: 1000,
+  deliveryDistance: 1121,
+  deliveryFee: 390,
+  smallOrderSurcharge: 0,
+  totalPrice: 4790,
+};
+
 export const inputErrors = {
   venueEmpty: "Venue is required",
   venueInvalid: `Venue must be either "home-assignment-venue-helsinki" or "home-assignment-venue-tallinn"`,

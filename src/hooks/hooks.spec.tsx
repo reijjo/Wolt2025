@@ -1,13 +1,14 @@
 import { act } from "react";
 
 import { renderHook } from "@testing-library/react";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { ModalProvider } from "../context";
+import { ModalProvider, PriceProvider } from "../context";
 import { exampleInputs } from "../tests/utils";
+import { UserInputs, initialUserInputs } from "../utils";
 import { useDetailsForm } from "./useDetailsForm";
 import { useGetLocation } from "./useGetLocation";
-import { beforeEach } from "node:test";
+import { useGetPrice } from "./useGetPrice";
 
 describe("HOOKS - useApi", () => {
   test("useApi ok", async () => {
@@ -145,31 +146,9 @@ describe("HOOKS - useDetailsForm", () => {
 
 describe("HOOKS - useGetLocation", () => {
   const mockSetUserInputs = vi.fn();
-  // const mockGetCurrentPosition = vi.fn();
 
   beforeEach(() => {
     vi.resetAllMocks();
-
-    // const mockGeolocation = {
-    //   getCurrentPosition: vi.fn((successCallback, errorCallback) => {
-    //     // You can simulate success or error scenarios
-    //     successCallback({
-    //       coords: {
-    //         latitude: 40.7128,
-    //         longitude: -74.006,
-    //       },
-    //     });
-
-    //     errorCallback({
-    //       code: 1,
-    //       message: "Permission denied",
-    //     });
-    //   }),
-    // };
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
   });
 
   test("useGetLocation - get IP location", async () => {
@@ -183,46 +162,100 @@ describe("HOOKS - useGetLocation", () => {
     await act(async () => {
       await result.current.getIpLocation();
     });
-
     expect(mockSetUserInputs).toHaveBeenCalledTimes(1);
   });
+});
 
-  // test("useGetLocation - get browser location", async () => {
-  //   const mockPosition = {
-  //     coords: {
-  //       latitude: 40.7128,
-  //       longitude: -74.006,
-  //     },
-  //   } as GeolocationPosition;
+describe("HOOKS - useGetPrice", () => {
+  const mockSetIsLoading = vi.fn();
+  const mockSetErrors = vi.fn();
+  const mockShowNotification = vi.fn();
+  const mockClearNotification = vi.fn();
+  const mockSetUserInputs = vi.fn();
 
-  //   mockGetCurrentPosition.mockImplementation((successCallback) => {
-  //     successCallback(mockPosition);
-  //   });
+  const setupHook = (inputs: UserInputs) => {
+    return renderHook(
+      () =>
+        useGetPrice({
+          setIsLoading: mockSetIsLoading,
+          setErrors: mockSetErrors,
+          showNotification: mockShowNotification,
+          clearNotification: mockClearNotification,
+          userInputs: inputs,
+          setUserInputs: mockSetUserInputs,
+        }),
+      { wrapper: PriceProvider },
+    );
+  };
 
-  //   const { result } = renderHook(
-  //     () =>
-  //       useGetLocation({
-  //         setUserInputs: mockSetUserInputs,
-  //       }),
-  //     {
-  //       wrapper: ModalProvider,
-  //     },
-  //   );
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
-  //   const event = {
-  //     preventDefault: vi.fn(),
-  //   } as unknown as React.SyntheticEvent;
+  test("calculatePrice - success", async () => {
+    const { result } = setupHook(exampleInputs);
 
-  //   await act(async () => {
-  //     result.current.getBrowserLocation(event);
-  //   });
+    const mockEvent = {
+      preventDefault: vi.fn(),
+    } as unknown as React.SyntheticEvent;
 
-  //   expect(event.preventDefault).toHaveBeenCalledTimes(1);
-  //   expect(mockSetUserInputs).toHaveBeenCalledWith(
-  //     expect.objectContaining({
-  //       userLatitude: 40.7128,
-  //       userLongitude: -74.006,
-  //     }),
-  //   );
-  // });
+    await act(async () => {
+      await result.current.calculatePrice(mockEvent);
+    });
+
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
+    expect(mockSetIsLoading).toHaveBeenCalledWith(true);
+    expect(mockClearNotification).toHaveBeenCalled();
+    expect(mockSetUserInputs).toHaveBeenCalledWith(initialUserInputs);
+    expect(mockSetIsLoading).toHaveBeenCalledWith(false);
+  });
+
+  test("calculatePrice - invalid input", async () => {
+    const invalidInputs = { ...initialUserInputs, cartValue: -1 };
+    const { result } = setupHook(invalidInputs);
+
+    const mockEvent = {
+      preventDefault: vi.fn(),
+    } as unknown as React.SyntheticEvent;
+
+    await act(async () => {
+      await result.current.calculatePrice(mockEvent);
+    });
+
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
+    expect(mockSetErrors).toHaveBeenCalled();
+    expect(mockShowNotification).toHaveBeenCalledWith(
+      expect.stringContaining("Please check your inputs"),
+      "error",
+      5,
+    );
+  });
+
+  test(" calculatePrice - handles API error", async () => {
+    const originalModule = await import("./usePriceCalculations");
+    vi.spyOn(originalModule, "usePriceCalculations").mockImplementation(() => ({
+      venue: null,
+      deliverySpecs: null,
+      getOrderInfo: vi.fn(() => Promise.reject(new Error("API Error"))),
+      getPrice: vi.fn(),
+    }));
+
+    const { result } = setupHook(initialUserInputs);
+
+    const mockEvent = {
+      preventDefault: vi.fn(),
+    } as unknown as React.SyntheticEvent;
+
+    await act(async () => {
+      await result.current.calculatePrice(mockEvent);
+    });
+
+    expect(mockShowNotification).toHaveBeenCalledWith(
+      "Please check your inputs",
+      "error",
+      5,
+    );
+
+    vi.restoreAllMocks();
+  });
 });

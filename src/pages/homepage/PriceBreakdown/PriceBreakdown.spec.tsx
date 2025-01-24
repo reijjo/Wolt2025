@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { usePriceContext } from "../../../context";
 import { customTestId } from "../../../tests/utils";
-import { PriceData } from "../../../utils";
+import { PriceData, filledPriceData } from "../../../utils";
 import { PriceBreakdown } from "../PriceBreakdown/PriceBreakdown";
 
 vi.mock("../../../context", () => ({
@@ -213,5 +213,24 @@ describe("PriceBreakdown", () => {
         expect(element).toHaveTextContent("0 m");
       }
     });
+  });
+
+  test("handles Order again button", () => {
+    const setPriceData = vi.fn();
+
+    vi.mocked(usePriceContext).mockReturnValue({
+      priceData: filledPriceData,
+      setPriceData,
+    });
+
+    render(<PriceBreakdown />);
+
+    const orderAgainButton = screen.getByRole("button", {
+      name: "Order again!",
+    });
+
+    orderAgainButton.click();
+
+    expect(setPriceData).toHaveBeenCalledWith(null);
   });
 });

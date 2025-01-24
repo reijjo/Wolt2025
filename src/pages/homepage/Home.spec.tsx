@@ -1,23 +1,13 @@
-import React from "react";
-
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { ModalProvider, PriceProvider, usePriceContext } from "../../context";
+import { ModalProvider, PriceContext, PriceProvider } from "../../context";
 import { customTestId, findRawValue } from "../../tests/utils";
-import { PriceData } from "../../utils";
+import { filledPriceData } from "../../utils";
 import { Home } from "./Home";
 
 beforeEach(() => {
   vi.clearAllMocks();
-
-  // render(
-  //   <ModalProvider>
-  //     <PriceProvider>
-  //       <Home />
-  //     </PriceProvider>
-  //   </ModalProvider>,
-  // );
 });
 
 describe("Home", () => {
@@ -79,39 +69,48 @@ describe("Home", () => {
   test("renders DetailsForm component", () => {
     vi.clearAllMocks();
 
-    vi.spyOn(React, "useContext").mockReturnValue({
-      priceData: null,
-      setPriceData: vi.fn(),
-    });
-
     render(
       <ModalProvider>
-        <PriceProvider>
+        <PriceContext.Provider
+          value={{ priceData: null, setPriceData: vi.fn() }}
+        >
           <Home />
-        </PriceProvider>
+        </PriceContext.Provider>
       </ModalProvider>,
     );
 
-    expect(screen.getByText("Delivery Order Price Calculator")).toBeVisible();
-    expect(screen.queryByText("Price breakdown")).not.toBeVisible();
+    const detailsFormElement = screen.queryByText(
+      "Delivery Order Price Calculator",
+    );
+    expect(detailsFormElement).toBeVisible();
+
+    const priceBreakdownElement = screen.queryByText("Price breakdown");
+    expect(priceBreakdownElement).not.toBeVisible();
   });
 
-  test.skip("renders PriceBreakdown component", async () => {
-    const mockData: PriceData = {
-      cartValue: 1000,
-      smallOrderSurcharge: 0,
-      deliveryFee: 190,
-      deliveryDistance: 177,
-      totalPrice: 1190,
-    };
-
+  test("renders PriceBreakdown component", async () => {
     vi.clearAllMocks();
 
-    vi.mocked(usePriceContext).mockReturnValue({
-      priceData: mockData,
-      setPriceData: vi.fn(),
-    });
+    render(
+      <ModalProvider>
+        <PriceContext.Provider
+          value={{ priceData: filledPriceData, setPriceData: vi.fn() }}
+        >
+          <Home />
+        </PriceContext.Provider>
+      </ModalProvider>,
+    );
 
+    const detailsFormElement = screen.queryByText(
+      "Delivery Order Price Calculator",
+    );
+    expect(detailsFormElement).not.toBeVisible();
+
+    const priceBreakdownElement = screen.queryByText("Price breakdown");
+    expect(priceBreakdownElement).toBeVisible();
+  });
+
+  test("doesnt find raw value element", () => {
     render(
       <ModalProvider>
         <PriceProvider>
@@ -120,9 +119,8 @@ describe("Home", () => {
       </ModalProvider>,
     );
 
-    expect(
-      screen.queryByText("Delivery Order Price Calculator"),
-    ).not.toBeVisible();
-    expect(screen.getByText("Price breakdown")).toBeVisible();
+    const random = findRawValue("random stuff");
+
+    expect(random).toBe(null);
   });
 });

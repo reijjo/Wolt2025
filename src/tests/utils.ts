@@ -7,7 +7,7 @@ export const customTestId = (id: string) => {
 };
 
 export const findRawValue = (labelText: string): string | null => {
-  const labelElement = screen.getByText(labelText);
+  const labelElement = screen.queryByText(labelText);
   if (!labelElement) return null;
 
   const span = labelElement?.parentElement?.querySelector(
