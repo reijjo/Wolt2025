@@ -4,6 +4,7 @@ import {
   DeliverySpecs,
   DeliverySpecsApiResponse,
   LonLat,
+  LonLatWithStatus,
 } from "../utils/types";
 
 export const fetchIpLocation = async (): Promise<LonLat | undefined> => {
@@ -11,11 +12,16 @@ export const fetchIpLocation = async (): Promise<LonLat | undefined> => {
   return response.data;
 };
 
-export const fetchVenue = async (venueSlug: string): Promise<LonLat> => {
+export const fetchVenue = async (
+  venueSlug: string,
+): Promise<LonLatWithStatus> => {
   const response = await axios.get(
     `https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/${venueSlug}/static`,
   );
-  return parsedVenue(response.data?.venue_raw?.location?.coordinates);
+  return parsedVenue({
+    venue: response.data?.venue_raw?.location?.coordinates,
+    status: response.status,
+  });
 };
 
 export const fetchDeliverySpecs = async (
@@ -24,25 +30,41 @@ export const fetchDeliverySpecs = async (
   const response = await axios.get(
     `https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/${venueSlug}/dynamic`,
   );
-  return parseDeliverySpecs(response.data?.venue_raw?.delivery_specs);
+  return parseDeliverySpecs({
+    specs: response.data?.venue_raw?.delivery_specs,
+    status: response.status,
+  });
 };
 
-const parsedVenue = (venue: number[]): LonLat => {
+const parsedVenue = ({
+  venue,
+  status,
+}: {
+  venue: number[];
+  status: number;
+}): LonLatWithStatus => {
   return {
-    lon: venue[0],
-    lat: venue[1],
+    venue: {
+      lon: venue[0],
+      lat: venue[1],
+    },
+    status: status,
   };
 };
 
-const parseDeliverySpecs = (
-  deliverySpecs: DeliverySpecsApiResponse,
-): DeliverySpecs => {
+const parseDeliverySpecs = ({
+  specs,
+  status,
+}: {
+  specs: DeliverySpecsApiResponse;
+  status: number;
+}): DeliverySpecs => {
   return {
-    noSurcharge: deliverySpecs.order_minimum_no_surcharge,
+    noSurcharge: specs.order_minimum_no_surcharge,
     pricing: {
-      basePrice: deliverySpecs?.delivery_pricing?.base_price,
+      basePrice: specs?.delivery_pricing?.base_price,
       distanceRanges:
-        deliverySpecs?.delivery_pricing?.distance_ranges.map((range) => ({
+        specs?.delivery_pricing?.distance_ranges.map((range) => ({
           min: range.min,
           max: range.max,
           a: range.a,
@@ -50,5 +72,6 @@ const parseDeliverySpecs = (
           flag: range.flag,
         })) ?? [],
     },
+    status: status,
   };
 };

@@ -3,12 +3,12 @@ import { useState } from "react";
 import { getDistance } from "geolib";
 
 import { usePriceContext } from "../context";
-import { DeliverySpecs, LonLat, UserInputs } from "../utils";
+import { DeliverySpecs, LonLatWithStatus, UserInputs } from "../utils";
 import { useApi } from "./useApi";
 import { useValidInputs } from "./useValidInputs";
 
 export const usePriceCalculations = () => {
-  const [venue, setVenue] = useState<LonLat | null>(null);
+  const [venue, setVenue] = useState<LonLatWithStatus | null>(null);
   const [deliverySpecs, setDeliverySpecs] = useState<DeliverySpecs | null>(
     null,
   );
@@ -40,8 +40,8 @@ export const usePriceCalculations = () => {
         longitude: inputs.userLongitude,
       },
       {
-        latitude: venueResult.lat,
-        longitude: venueResult.lon,
+        latitude: venueResult.venue.lat,
+        longitude: venueResult.venue.lon,
       },
     );
 

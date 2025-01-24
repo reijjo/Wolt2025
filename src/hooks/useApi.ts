@@ -8,8 +8,14 @@ export const useApi = () => {
       const specs = await fetchDeliverySpecs(url);
       return specs;
     } catch (error: unknown) {
-      console.error("Error fetching delivery specs", error);
-      throw new Error("Error fetching delivery info");
+      if (isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message ??
+            "An error occurred while fetching data",
+        );
+      }
+      console.error("Error fetching venue location");
+      throw new Error("Error fetching venue location");
     }
   };
 
@@ -18,7 +24,13 @@ export const useApi = () => {
       const venue = await fetchVenue(url);
       return venue;
     } catch (error: unknown) {
-      console.error("Error fetching venue location", error);
+      if (isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.message ??
+            "An error occurred while fetching data",
+        );
+      }
+      console.error("Error fetching venue location");
       throw new Error("Error fetching venue location");
     }
   };
@@ -27,7 +39,9 @@ export const useApi = () => {
     if (error instanceof Error) {
       return error.message;
     } else if (isAxiosError(error)) {
-      return "An error occurred while fetching data";
+      return (
+        error.response?.data?.message ?? "An error occurred while fetching data"
+      );
     } else {
       return "An unexpected error occurred";
     }

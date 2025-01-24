@@ -5,15 +5,12 @@ import { Modal } from "../components";
 import { useModalContext } from "../context";
 import { UserInputs } from "../utils";
 
-// import { initialUserInputs } from "../utils";
-
 interface UseGetLocationProps {
   setUserInputs: Dispatch<SetStateAction<UserInputs>>;
 }
 
 export const useGetLocation = ({ setUserInputs }: UseGetLocationProps) => {
   const [useIp, setUseIp] = useState(false);
-  // const [userInputs, setUserInputs] = useState<UserInputs>(initialUserInputs);
 
   const { closeModal, openModal } = useModalContext();
 

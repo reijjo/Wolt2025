@@ -10,6 +10,11 @@ export interface LonLat {
   lat: number;
 }
 
+export interface LonLatWithStatus {
+  venue: LonLat;
+  status: number;
+}
+
 export interface PriceData {
   cartValue: number | null;
   smallOrderSurcharge: number | null;
@@ -31,6 +36,7 @@ export interface DeliveryPricing {
 export interface DeliverySpecs {
   noSurcharge: number;
   pricing: DeliveryPricing;
+  status: number;
 }
 
 export interface DeliverySpecsApiResponse {

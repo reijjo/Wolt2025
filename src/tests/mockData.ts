@@ -10,9 +10,13 @@ export const fetchSpecsMock = {
       { min: 2000, max: 0, a: 0, b: 0, flag: null },
     ],
   },
+  status: 200,
 };
 
 export const fetchVenueLocationMock = {
-  lat: 60.17012143,
-  lon: 24.92813512,
+  venue: {
+    lat: 60.17012143,
+    lon: 24.92813512,
+  },
+  status: 200,
 };
