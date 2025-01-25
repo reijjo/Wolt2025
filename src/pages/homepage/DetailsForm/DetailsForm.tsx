@@ -84,6 +84,7 @@ export const DetailsForm = () => {
           handleBlur={handleBlur}
           errors={errors}
         />
+
         {notification && (
           <Notification
             message={notification.message}
@@ -93,6 +94,7 @@ export const DetailsForm = () => {
             extraClass="column-span"
           />
         )}
+
         <FormButtons
           userInputs={userInputs}
           getBrowserLocation={getBrowserLocation}

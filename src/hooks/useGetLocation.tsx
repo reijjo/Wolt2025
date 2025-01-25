@@ -55,6 +55,16 @@ export const useGetLocation = ({ setUserInputs }: UseGetLocationProps) => {
             action={() => setUseIp(true)}
           />,
         );
+      } else {
+        openModal(
+          <Modal
+            header="Error getting location!"
+            children="Please try again."
+            okBtn="Go back"
+            cancelBtn="Close"
+            action={() => setUseIp(true)}
+          />,
+        );
       }
     };
 

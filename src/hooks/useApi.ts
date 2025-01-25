@@ -14,8 +14,8 @@ export const useApi = () => {
             "An error occurred while fetching data",
         );
       }
-      console.error("Error fetching venue location");
-      throw new Error("Error fetching venue location");
+      console.error("Error fetching data");
+      throw new Error("Error fetching data");
     }
   };
 

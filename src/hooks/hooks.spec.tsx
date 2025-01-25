@@ -1,8 +1,17 @@
-import { act } from "react";
+import { SyntheticEvent, act } from "react";
 
 import { renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+  vi,
+} from "vitest";
 
+import * as apiModule from "../api/api";
 import { ModalProvider, PriceProvider } from "../context";
 import { exampleInputs } from "../tests/utils";
 import { UserInputs, initialUserInputs } from "../utils";
@@ -36,6 +45,32 @@ describe("HOOKS - useApi", () => {
     await expect(fetchSpecs(url)).rejects.toThrow(
       "No venue with slug of 'turku' was found",
     );
+  });
+
+  test("useApi - fetchSpecs Axios error", async () => {
+    const { useApi } = await import("../hooks/useApi");
+    const { fetchSpecs } = useApi();
+    const url = "turku";
+
+    vi.spyOn(apiModule, "fetchDeliverySpecs").mockRejectedValueOnce({
+      isAxiosError: true,
+    });
+
+    await expect(fetchSpecs(url)).rejects.toThrow(
+      "An error occurred while fetching data",
+    );
+  });
+
+  test("useApi - fetchSpecs random error", async () => {
+    const { useApi } = await import("../hooks/useApi");
+    const { fetchSpecs } = useApi();
+    const url = "turku";
+
+    vi.spyOn(apiModule, "fetchDeliverySpecs").mockRejectedValueOnce(
+      new Error("Network Error"),
+    );
+
+    await expect(fetchSpecs(url)).rejects.toThrow("Error fetching data");
   });
 
   test("useApi - fetchVenueLocation ok", async () => {
@@ -149,6 +184,16 @@ describe("HOOKS - useGetLocation", () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
+    vi.clearAllMocks();
+  });
+
+  beforeAll(() => {
+    Object.defineProperty(global.navigator, "geolocation", {
+      value: {
+        getCurrentPosition: vi.fn(),
+      },
+      writable: true,
+    });
   });
 
   test("useGetLocation - get IP location", async () => {
@@ -231,7 +276,7 @@ describe("HOOKS - useGetPrice", () => {
     );
   });
 
-  test(" calculatePrice - handles API error", async () => {
+  test("calculatePrice - handles API error", async () => {
     const originalModule = await import("./usePriceCalculations");
     vi.spyOn(originalModule, "usePriceCalculations").mockImplementation(() => ({
       venue: null,
@@ -257,5 +302,160 @@ describe("HOOKS - useGetPrice", () => {
     );
 
     vi.restoreAllMocks();
+  });
+
+  test("useGetLocation - getIpLocation updates location", async () => {
+    const { result } = renderHook(
+      () => useGetLocation({ setUserInputs: mockSetUserInputs }),
+      { wrapper: ModalProvider },
+    );
+
+    vi.spyOn(apiModule, "fetchIpLocation").mockResolvedValueOnce({
+      lat: 60.1797,
+      lon: 24.9344,
+    });
+
+    await act(async () => {
+      await result.current.getIpLocation();
+    });
+
+    expect(mockSetUserInputs).toHaveBeenCalledWith(expect.any(Function));
+
+    const updaterFunction = mockSetUserInputs.mock.calls[0][0];
+    const previousState = { userLatitude: 0, userLongitude: 0 };
+    const newState = updaterFunction(previousState);
+
+    expect(newState).toEqual({
+      ...previousState,
+      userLatitude: 60.1797,
+      userLongitude: 24.9344,
+    });
+  });
+
+  test("useGetLocation - getIpLocation handles error", async () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    const { result } = renderHook(
+      () => useGetLocation({ setUserInputs: mockSetUserInputs }),
+      { wrapper: ModalProvider },
+    );
+
+    vi.spyOn(apiModule, "fetchIpLocation").mockRejectedValueOnce(
+      new Error("Failed to fetch IP location"),
+    );
+
+    try {
+      await act(async () => {
+        await result.current.getIpLocation();
+      });
+    } catch (error) {
+      expect(error).toEqual(new Error("Error getting location by ip"));
+    }
+
+    expect(mockSetUserInputs).not.toHaveBeenCalled();
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Error getting location by ip",
+      expect.any(Error),
+    );
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  test("useGetLocation - getBrowserLocation success", async () => {
+    const { result } = renderHook(
+      () => useGetLocation({ setUserInputs: mockSetUserInputs }),
+      { wrapper: ModalProvider },
+    );
+
+    const mockPosition = {
+      coords: {
+        latitude: 60.1699,
+        longitude: 24.9384,
+      },
+    };
+    vi.spyOn(
+      navigator.geolocation,
+      "getCurrentPosition",
+    ).mockImplementationOnce((success) =>
+      success(mockPosition as GeolocationPosition),
+    );
+
+    await act(async () => {
+      result.current.getBrowserLocation({
+        preventDefault: vi.fn(),
+      } as unknown as SyntheticEvent);
+    });
+
+    expect(mockSetUserInputs).toHaveBeenCalledWith(expect.any(Function));
+
+    const updaterFunction = mockSetUserInputs.mock.calls[0][0];
+    const previousState = { userLatitude: 0, userLongitude: 0 };
+    const newState = updaterFunction(previousState);
+
+    expect(newState).toEqual({
+      ...previousState,
+      userLatitude: 60.1699,
+      userLongitude: 24.9384,
+    });
+  });
+
+  test("useGetLocation - getBrowserLocation error (user denies access)", async () => {
+    const { result } = renderHook(
+      () => useGetLocation({ setUserInputs: mockSetUserInputs }),
+      { wrapper: ModalProvider },
+    );
+
+    const mockError = {
+      code: 1,
+      message: "User denied location access",
+    };
+    vi.spyOn(
+      navigator.geolocation,
+      "getCurrentPosition",
+    ).mockImplementationOnce((_, error) =>
+      error?.(mockError as GeolocationPositionError),
+    );
+
+    await act(async () => {
+      result.current.getBrowserLocation({
+        preventDefault: vi.fn(),
+      } as unknown as SyntheticEvent);
+    });
+  });
+
+  test("useGetLocation - getBrowserLocation error (other errors)", async () => {
+    const { result } = renderHook(
+      () => useGetLocation({ setUserInputs: mockSetUserInputs }),
+      { wrapper: ModalProvider },
+    );
+
+    const mockError = {
+      code: 2,
+      message: "Position unavailable",
+    };
+    vi.spyOn(
+      navigator.geolocation,
+      "getCurrentPosition",
+    ).mockImplementationOnce((_, error) =>
+      error?.(mockError as GeolocationPositionError),
+    );
+
+    await act(async () => {
+      result.current.getBrowserLocation({
+        preventDefault: vi.fn(),
+      } as unknown as SyntheticEvent);
+    });
+
+    expect(result.current.useIp).toBe(false);
+  });
+
+  afterAll(() => {
+    Object.defineProperty(global.navigator, "geolocation", {
+      value: undefined,
+      writable: true,
+    });
   });
 });
