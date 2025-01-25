@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { usePriceContext } from "../../../context";
-// Import the actual hook
 import { customTestId } from "../../../tests/utils";
 import { PriceData, filledPriceData } from "../../../utils";
 import { PriceBreakdown } from "../PriceBreakdown/PriceBreakdown";
